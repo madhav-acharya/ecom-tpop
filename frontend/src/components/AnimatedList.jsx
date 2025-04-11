@@ -3,6 +3,7 @@ import { motion, useInView } from 'framer-motion';
 import '../styles/AnimatedList.css';
 import { setSelectedCategory } from '../app/features/search/searchSlice';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const AnimatedItem = ({ children, delay = 0, index, onMouseEnter, onClick }) => {
   const dispatch = useDispatch();
@@ -97,6 +98,7 @@ const AnimatedList = ({
     }
     setKeyboardNav(false);
   }, [selectedIndex, keyboardNav]);
+  const navigate = useNavigate();
 
   return (
     <div className="animated-list">
@@ -114,6 +116,7 @@ const AnimatedList = ({
             onMouseEnter={() => setSelectedIndex(index)}
             onClick={() => {
               setSelectedIndex(index);
+              navigate("/search-result");
               if (onItemSelect) {
                 onItemSelect(item, index);
               }

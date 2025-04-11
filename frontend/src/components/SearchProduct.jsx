@@ -1,35 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { TbCurrencyRupeeNepalese as DollarSign } from "react-icons/tb";
-import { 
-  Search, 
-  X, 
-  Filter, 
-  ChevronDown, 
-  Star, 
-  Heart, 
-  ShoppingCart, 
-  Eye,
-  Tag,
-  Grid3X3,
-  ArrowDown,
-  ArrowUp
-} from 'lucide-react';
+import { Link } from 'react-router-dom';
 import '../styles/SearchProduct.css';
 import Product from './Product';
+import { 
+  Search, 
+  Filter, 
+  SlidersHorizontal, 
+  ChevronDown, 
+  ChevronUp, 
+  X, 
+  ShoppingCart, 
+  Star
+} from 'lucide-react';
 import { useGetProductsQuery } from '../app/api/productAPI';
-import { useGetCategoriesQuery } from '../app/api/categoryAPI';
 import { useDispatch, useSelector } from "react-redux";
 import { fetchFavorites } from "../app/api/favoriteAPI";
 import { setSearchTerm } from '../app/features/search/searchSlice';
 
-const brands = ['All', 'SoundCore', 'AppleX', 'Nike', 'Gucci', 'Breville', 'IKEA', 'Lululemon', 'Fitbit'];
-const ratingOptions = [5, 4, 3, 2, 1];
+
 const SearchProduct = () => {
-    const { data: products } = useGetProductsQuery();
-    const { data: categories } = useGetCategoriesQuery();
+      const { data: products, isSuccess } = useGetProductsQuery();
     const dispatch = useDispatch();
     const searchTerm = useSelector((state) => state.search.searchTerm);
-      const favorites = useSelector((state => state.favorites));
+    const favorites = useSelector((state => state.favorites));
       useEffect(() => {
         if (favorites?.status === "idle") {
           dispatch(fetchFavorites());
@@ -39,395 +32,194 @@ const SearchProduct = () => {
         }
       }, [dispatch, favorites.status]);
 
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [selectedBrand, setSelectedBrand] = useState('All');
-  const [minRating, setMinRating] = useState(0);
-  const [filteredProducts, setFilteredProducts] = useState(products);
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 10000 });
-  const [showNoResults, setShowNoResults] = useState(false);
-  const [sortOrder, setSortOrder] = useState(null);
-  const [sortBy, setSortBy] = useState(null);
+  const [priceRange, setPriceRange] = useState([0, 1000000]);
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedBrand, setSelectedBrand] = useState('');
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
+  const [showBrandDropdown, setShowBrandDropdown] = useState(false);
 
-  console.log("searchTerm", searchTerm);
-  useEffect(() => {
-    setFilteredProducts(products);
-  }, [products]);
-
-  const handleSearch = (e) => {
-    // const searchTerm = e?.target?.value;
-    setFilteredProducts(products);
-    if (selectedCategory !== 'All') {
-      setFilteredProducts(filteredProducts?.filter(product =>
-        product?.category === selectedCategory
-      ));
-    }
-    if (selectedBrand !== 'All') {
-      setFilteredProducts(filteredProducts?.filter(product =>
-        product?.brand === selectedBrand
-      ));
-    }
-    setFilteredProducts(filteredProducts?.filter(product =>
-      product?.price >= priceRange?.min && product?.price <= priceRange?.max
-    ));
-    if (minRating > 0) {
-      setFilteredProducts(filteredProducts?.filter(product =>
-        product?.rating >= minRating
-      ));
-    }
-    if (sortBy && sortOrder) {      
-      setFilteredProducts([...filteredProducts]?.sort((a, b) => {
-        if (sortOrder === 'asc') {
-          return a[sortBy] - b[sortBy];
-        } else {
-          return b[sortBy] - a[sortBy];
-        }
-      }));
-    }
-    if (selectedCategory === 'All') {
-      setFilteredProducts(products);
-    }
-    if (selectedBrand === 'All') {
-      setFilteredProducts(products);
-    }
-    if (priceRange?.min === 0 && priceRange?.max === 10000) {
-      setFilteredProducts(products);
-    }
-    if (minRating === 0) {
-      setFilteredProducts(products);
-    }
-    if (sortBy === null && sortOrder === null) {
-      setFilteredProducts(products);
-    }
-    if (sortBy === 'price' && sortOrder === 'asc') {
-      setFilteredProducts([...filteredProducts]?.sort((a, b) => a?.sellingPrice - b?.sellingPrice));
-    }
-    if (sortBy === 'price' && sortOrder === 'desc') {
-      setFilteredProducts([...filteredProducts]?.sort((a, b) => b?.sellingPrice - a?.sellingPrice));
-    }
-    if (sortBy === 'rating' && sortOrder === 'asc') {
-      setFilteredProducts([...filteredProducts]?.sort((a, b) => a?.rating - b?.rating));
-    }
-    if (sortBy === 'rating' && sortOrder === 'desc') {
-      setFilteredProducts([...filteredProducts]?.sort((a, b) => b?.rating - a?.rating));
-    }
-    if (sortBy === 'name' && sortOrder === 'asc') {
-      setFilteredProducts([...filteredProducts]?.sort((a, b) => a?.name?.localeCompare(b?.name)));
-    }
-    if (sortBy === 'name' && sortOrder === 'desc') {
-      setFilteredProducts([...filteredProducts]?.sort((a, b) => b?.name?.localeCompare(a?.name)));
-    }
-    if (sortBy === 'brand' && sortOrder === 'asc') {
-      setFilteredProducts([...filteredProducts]?.sort((a, b) => a?.brand?.localeCompare(b?.brand)));
-    }
-    if (sortBy === 'brand' && sortOrder === 'desc') {
-      setFilteredProducts([...filteredProducts]?.sort((a, b) => b?.brand?.localeCompare(a?.brand)));
-    }
-    if (sortBy === 'category' && sortOrder === 'asc') {
-      setFilteredProducts([...filteredProducts]?.sort((a, b) => a?.category?.localeCompare(b?.category)));
-    }
-    if (sortBy === 'category' && sortOrder === 'desc') {
-      setFilteredProducts([...filteredProducts]?.sort((a, b) => b?.category?.localeCompare(a?.category)));
-    }
-    if (sortBy === 'createdAt' && sortOrder === 'asc') {
-      setFilteredProducts([...filteredProducts]?.sort((a, b) => new Date(a?.createdAt) - new Date(b?.createdAt)));
-    }
-    if (sortBy === 'createdAt' && sortOrder === 'desc') {
-      setFilteredProducts([...filteredProducts]?.sort((a, b) => new Date(b?.createdAt) - new Date(a?.createdAt)));
-    }
-    if (sortBy === 'updatedAt' && sortOrder === 'asc') {
-      setFilteredProducts([...filteredProducts]?.sort((a, b) => new Date(a?.updatedAt) - new Date(b?.updatedAt)));
-    }
-    if (sortBy === 'updatedAt' && sortOrder === 'desc') {
-      setFilteredProducts([...filteredProducts]?.sort((a, b) => new Date(b?.updatedAt) - new Date(a?.updatedAt)));
-    }
-    if (sortBy === 'createdAt' && sortOrder === 'asc') {
-      setFilteredProducts([...filteredProducts]?.sort((a, b) => new Date(a?.createdAt) - new Date(b?.createdAt)));
-    }
-    if (sortBy === 'createdAt' && sortOrder === 'desc') {
-      setFilteredProducts([...filteredProducts]?.sort((a, b) => new Date(b?.createdAt) - new Date(a?.createdAt)));
-    }
-    if (sortBy === 'updatedAt' && sortOrder === 'asc') {
-      setFilteredProducts([...filteredProducts]?.sort((a, b) => new Date(a?.updatedAt) - new Date(b?.updatedAt)));
-    }
-    if (sortBy === 'updatedAt' && sortOrder === 'desc') {
-      setFilteredProducts([...filteredProducts]?.sort((a, b) => new Date(b?.updatedAt) - new Date(a?.updatedAt)));
-    }
-    if (sortBy === 'createdAt' && sortOrder === 'asc') {
-      setFilteredProducts([...filteredProducts]?.sort((a, b) => new Date(a?.createdAt) - new Date(b?.createdAt)));
-    }
-    if (sortBy === 'createdAt' && sortOrder === 'desc') {
-      setFilteredProducts([...filteredProducts]?.sort((a, b) => new Date(b?.createdAt) - new Date(a?.createdAt)));
-    }
-    if (sortBy === 'updatedAt' && sortOrder === 'asc') {
-      setFilteredProducts([...filteredProducts]?.sort((a, b) => new Date(a?.updatedAt) - new Date(b?.updatedAt)));
-    }         
-    if (searchTerm) {
-      setFilteredProducts(filteredProducts?.filter(product =>
-        product?.name?.toLowerCase()?.includes(searchTerm?.toLowerCase())
-      ));
-      setShowNoResults(filteredProducts?.length === 0);
-    }
-    console.log("searchTerm", searchTerm);
-  };
+  const categories = [...new Set(products?.map(product => product?.category))];
+  const brands = [...new Set(products?.map(product => product?.brand))];
   
-  // useEffect(() => {
-  //   const delaySearch = setTimeout(() => {
-  //     let results = products;
-  //     if (searchTerm) {
-  //       results = results?.filter(product => 
-  //         product?.name?.toLowerCase()?.includes(searchTerm?.toLowerCase())
-  //       );
-  //     }
-  //     if (selectedCategory !== 'All') {
-  //       results = results?.filter(product => 
-  //         product?.category === selectedCategory
-  //       );
-  //     }
-  //     if (selectedBrand !== 'All') {
-  //       results = results?.filter(product => 
-  //         product?.brand === selectedBrand
-  //       );
-  //     }
-  //     results = results?.filter(product => 
-  //       product?.price >= priceRange?.min && product?.price <= priceRange?.max
-  //     );
-  //     if (minRating > 0) {
-  //       results = results?.filter(product => 
-  //         product?.rating >= minRating
-  //       );
-  //     }
-  //     if (sortBy && sortOrder) {
-  //       results = [...results]?.sort((a, b) => {
-  //         if (sortOrder === 'asc') {
-  //           return a[sortBy] - b[sortBy];
-  //         } else {
-  //           return b[sortBy] - a[sortBy];
-  //         }
-  //       });
-  //     }
-      
-  //     setFilteredProducts(results);
-  //     setShowNoResults(results?.length === 0);
-  //     console.log("results", results);
-  //   }, 300);
-    
-  //   return () => clearTimeout(delaySearch);
-  // }, [searchTerm, selectedCategory, selectedBrand, priceRange, minRating, sortBy, sortOrder]);
+  useEffect(() => {
+    let results = products || [];
+    if (isSuccess) {
+      setFilteredProducts(products);
+      results = products || [];
 
-  const handleSearchChange = (e) => {
-    dispatch(setSearchTerm(e.target.value));
-  };
-  const handleCategoryChange = (category) => {
-    setSelectedCategory(category);
-  };
-
-  const handleBrandChange = (brand) => {
-    setSelectedBrand(brand);
-  };
-  const handlePriceChange = (e) => {
-    const { name, value } = e?.target;
-    setPriceRange(prev => ({
-      ...prev,
-      [name]: parseFloat(value)
-    }));
-  };
-  const handleRatingChange = (rating) => {
-    setMinRating(rating === minRating ? 0 : rating);
-  };
-
-  const handleSort = (sortByField) => {
-    if (sortBy === sortByField) {
-      if (sortOrder === 'asc') {
-        setSortOrder('desc');
-      } else if (sortOrder === 'desc') {
-        setSortBy(null);
-        setSortOrder(null);
-      }
-    } else {
-      setSortBy(sortByField);
-      setSortOrder('asc');
+    if (searchTerm) {
+      results = results?.filter(product => 
+        product?.name?.toLowerCase()?.includes(searchTerm?.toLowerCase())
+      );
     }
-  };
+ 
+    if (priceRange !== undefined && priceRange?.length > 0)
+    {
+      results = results?.filter(product => 
+      product?.sellingPrice >= priceRange?.[0] && product?.sellingPrice <= priceRange?.[1]
+      );
+    }
+ 
+    if (selectedCategory) {
+      results = results?.filter(product => product?.category === selectedCategory);
+    }
+  
+    if (selectedBrand) {
+      results = results?.filter(product => product?.brand === selectedBrand);
+    }
+    
+    setFilteredProducts(results);
+     }
+  }, [searchTerm, selectedCategory, selectedBrand, products, isSuccess, priceRange]);
 
-  const resetFilters = () => {
+  const clearFilters = () => {
     dispatch(setSearchTerm(''));
-    setSelectedCategory('All');
-    setSelectedBrand('All');
-    setPriceRange({ min: 0, max: 10000 });
-    setMinRating(0);
-    setSortBy(null);
-    setSortOrder(null);
+    setPriceRange([0, 1000000]);
+    setSelectedCategory('');
+    setSelectedBrand('');
   };
 
-  const renderStars = (rating) => {
-    return Array.from({ length: 5 }).map((_, index) => (
-      <Star
-        key={index}
-        size={15}
-        className={index < Math.floor(rating) ? "filled" : ""}
-        fill={index < Math.floor(rating) ? "#ffb954" : "none"}
-        stroke={index < Math.floor(rating) ? "#ffb954" : "currentColor"}
-      />
-    ));
-  };
-
-  const renderRatingOptions = () => {
-    return ratingOptions?.map((rating) => (
-      <button
-        key={rating}
-        className={`rating-button ${minRating === rating ? 'active' : ''}`}
-        onClick={() => handleRatingChange(rating)}
-      >
-        {renderStars(rating)}
-        <span>&amp; Up</span>
-      </button>
-    ));
+  const handlePriceChange = (e) => {
+    setPriceRange([0, parseInt(e?.target?.value)]);
   };
 
   return (
     <div className="search-container">
-      <div className="search-header">
-        <h1>Find Your Perfect Product</h1>
-        <p>Explore our wide selection of quality products</p>
-      </div>
-      
-      <div className={`search-bar-container ${isSearchFocused ? 'focused' : ''}`}>
-        <div className="search-icon">
-          <Search size={22} />
-        </div>
-        <input
-          type="search"
-          placeholder="Search for products..."
-          value={searchTerm}
-          onChange={handleSearchChange}
-          onFocus={() => setIsSearchFocused(true)}
-          onBlur={() => setIsSearchFocused(false)}
-          className="search-input"
-        />
-      </div>
-      
-      <div className="filter-section">
-        <div className="categories">
-          <h3>
-            <Tag size={20} />
-            Categories
-          </h3>
-          <div className="category-buttons">
-            {categories?.map(category => (
-              <button
-                key={category?._id}
-                className={`category-button ${selectedCategory === category?.name ? 'active' : ''}`}
-                onClick={() => handleCategoryChange(category?.name)}
-              >
-                {category?.name}
-              </button>
-            ))}
+      <header className="search-header">
+        <p>Find your perfect product with our advanced search</p>
+      </header>
+
+      <div className="search-filters-container">
+        <div className="filters-section">
+          <div className="filter-header">
+            <h3><Filter size={18} /> Filters</h3>
+            <button className="clear-filters-btn" onClick={clearFilters}>Clear All</button>
           </div>
-        </div>
-        
-        <div className="brands-filter">
-          <h3>
-            <Tag size={20} />
-            Brands
-          </h3>
-          <div className="brand-buttons">
-            {brands?.map(brand => (
-              <button
-                key={brand}
-                className={`brand-button ${selectedBrand === brand ? 'active' : ''}`}
-                onClick={() => handleBrandChange(brand)}
-              >
-                {brand}
-              </button>
-            ))}
-          </div>
-        </div>
-        
-        <div className="price-filter">
-          <h3>
-            <DollarSign size={20} />
-            Price Range
-          </h3>
-          <div className="price-inputs">
-            <div className="price-input-container">
-              <span className="dollar-sign"><DollarSign/></span>
-              <input
-                type="number"
-                name="min"
-                value={priceRange?.min}
-                onChange={handlePriceChange}
-                min="0"
-                max={priceRange?.max}
-              />
-              <label>Min</label>
+
+          <div className="filters-row">
+            {/* Price Range Filter */}
+            <div className="filter-group price-filter">
+              <h4><SlidersHorizontal size={16} /> Price Range</h4>
+              <div className="price-slider-container">
+                <input
+                  type="range"
+                  min="0"
+                  max={1000000}
+                  value={priceRange?.[1]}
+                  onChange={handlePriceChange}
+                  className="price-slider"
+                />
+                <div className="price-range-labels">
+                  <span>Rs{priceRange[0]}</span>
+                  <span>Rs{priceRange[1]}</span>
+                </div>
+              </div>
             </div>
-            <div className="price-range-divider"></div>
-            <div className="price-input-container">
-              <span className="dollar-sign"><DollarSign/></span>
-              <input
-                type="number"
-                name="max"
-                value={priceRange?.max}
-                onChange={handlePriceChange}
-                min={priceRange?.min}
-              />
-              <label>Max</label>
+            <div className="filter-group">
+              <div 
+                className="dropdown-header" 
+                onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
+              >
+                <h4>Category</h4>
+                {showCategoryDropdown ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+              </div>
+              {showCategoryDropdown && (
+                <div className="dropdown-content">
+                  <div 
+                    className={`dropdown-item ${selectedCategory === '' ? 'selected' : ''}`}
+                    onClick={() => setSelectedCategory('')}
+                  >
+                    All Categories
+                  </div>
+                  {categories.map(category => (
+                    <div 
+                      key={category} 
+                      className={`dropdown-item ${selectedCategory === category ? 'selected' : ''}`}
+                      onClick={() => setSelectedCategory(category)}
+                    >
+                      {category}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className="filter-group">
+              <div 
+                className="dropdown-header" 
+                onClick={() => setShowBrandDropdown(!showBrandDropdown)}
+              >
+                <h4>Brand</h4>
+                {showBrandDropdown ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+              </div>
+              {showBrandDropdown && (
+                <div className="dropdown-content">
+                  <div 
+                    className={`dropdown-item ${selectedBrand === '' ? 'selected' : ''}`}
+                    onClick={() => setSelectedBrand('')}
+                  >
+                    All Brands
+                  </div>
+                  {brands.map(brand => (
+                    <div 
+                      key={brand} 
+                      className={`dropdown-item ${selectedBrand === brand ? 'selected' : ''}`}
+                      onClick={() => setSelectedBrand(brand)}
+                    >
+                      {brand}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
-        
-        <div className="rating-filter">
-          <h3>
-            <Star size={20} />
-            Ratings
-          </h3>
-          <div className="rating-buttons">
-            {renderRatingOptions()}
-          </div>
-        </div>
       </div>
-      
-      <div className="search-results">
-        <div className="search-results-header">
+      <div className="products-container">
+        <div className="products-header">
           <h2>
-            <Grid3X3 size={20} />
-            Search Results
+            {filteredProducts?.length} {filteredProducts?.length === 1 ? 'Product' : 'Products'} Found
           </h2>
-          <div className="results-actions">
-            <span className="results-count">{filteredProducts?.length} products found</span>
-            <div className="sort-controls">
-              <button 
-                className={`sort-button ${sortBy === 'price' ? 'active' : ''}`} 
-                onClick={() => handleSort('price')}
-              >
-                Price
-                {sortBy === 'price' && sortOrder === 'asc' && <ArrowUp size={14} />}
-                {sortBy === 'price' && sortOrder === 'desc' && <ArrowDown size={14} />}
-              </button>
-              <button 
-                className={`sort-button ${sortBy === 'rating' ? 'active' : ''}`} 
-                onClick={() => handleSort('rating')}
-              >
-                Rating
-                {sortBy === 'rating' && sortOrder === 'asc' && <ArrowUp size={14} />}
-                {sortBy === 'rating' && sortOrder === 'desc' && <ArrowDown size={14} />}
-              </button>
+          {(searchTerm || selectedCategory || selectedBrand || priceRange?.[1] < 1000000) && (
+            <div className="active-filters">
+              {searchTerm && (
+                <div className="filter-tag">
+                  Search: "{searchTerm}"
+                  <button onClick={() => dispatch(setSearchTerm(''))}><X size={12} /></button>
+                </div>
+              )}
+              {selectedCategory && (
+                <div className="filter-tag">
+                  Category: {selectedCategory}
+                  <button onClick={() => setSelectedCategory('')}><X size={12} /></button>
+                </div>
+              )}
+              {selectedBrand && (
+                <div className="filter-tag">
+                  Brand: {selectedBrand}
+                  <button onClick={() => setSelectedBrand('')}><X size={12} /></button>
+                </div>
+              )}
+              {priceRange[1] < 1000000 && (
+                <div className="filter-tag">
+                  Max Price: ${priceRange?.[1]}
+                  <button onClick={() => setPriceRange([0, 1000000])}><X size={12} /></button>
+                </div>
+              )}
             </div>
-          </div>
+          )}
         </div>
-        
-        {showNoResults ? (
-          <div className="no-results">
-            <X size={60} />
-            <p>No products found matching your criteria</p>
-            <button className="reset-button" onClick={resetFilters}>
-              Reset Filters
-            </button>
+
+        {/* Product grid */}
+        {filteredProducts?.length > 0 ? (
+          <div className="products-grid">
+            <Product productList={filteredProducts} tagName={"searched items"}/>
           </div>
         ) : (
-          <div className="product-grid">
-            <Product productList={filteredProducts} tagName="Search Results" />
+          <div className="no-products-found">
+            <h3>No products match your search criteria</h3>
+            <p>Try adjusting your filters or search terms</p>
+            <button className="clear-filters-btn" onClick={clearFilters}>Clear All Filters</button>
           </div>
         )}
       </div>

@@ -65,15 +65,12 @@
     position: absolute;
     outline: none;
     font-size: 1rem;
-    color: transparent;
-    /* margin-top: 1rem; */
 }
 #search-bar::-webkit-search-cancel-button {
     display: none;
   }
 #search-bar:focus-visible{
     border: 2px solid #FF2905;
-    color: black;
 }
 .login, .register{
     color: #a6a6aa;
