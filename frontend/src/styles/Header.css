@@ -1,0 +1,329 @@
+.header{
+    background-color: #FFFFFF;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    /* margin-bottom: 600px; */
+}
+.upper-nav{
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    width: calc(100% - 20rem);
+    /* min-width: 30rem; */
+    margin: 0 auto;
+    padding: 1rem 0;
+}
+.full-lower-nav{
+    background-color: #FF2905;
+}
+.lower-nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #FF2905;
+    width: calc(100% - 20rem);
+    /* min-width: 30rem; */
+    margin: 0 auto;
+    color: white;
+}
+.logo img{
+    width: 6rem;
+    height: 2.5rem;
+}
+.logo-link{
+    text-decoration: none;
+    color: #FF2905;
+    font-weight: 900;
+    font-size: 1.5rem;
+}
+.categories-overlay{
+    position: absolute;
+    top: 110%;
+    left: 0;
+    width: 100%;
+    background-color: #FFFFFF;
+}
+.cat-cat{
+    display: flex;
+    gap: 2rem;
+}
+.search-bar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+#search-bar{
+    padding: .7rem 1rem;
+    border-radius: 1.3rem;
+    width: 90%;
+    border: .1px solid #a6a6aa;
+    position: absolute;
+    outline: none;
+    font-size: 1rem;
+    color: transparent;
+    /* margin-top: 1rem; */
+}
+#search-bar::-webkit-search-cancel-button {
+    display: none;
+  }
+#search-bar:focus-visible{
+    border: 2px solid #FF2905;
+    color: black;
+}
+.login, .register{
+    color: #a6a6aa;
+    text-decoration: none;
+}
+.login:hover, .register:hover, .search-icon:hover{
+    color: #FF2905;
+    cursor: pointer;
+}
+.user-icon:hover{
+    color: #FF2905;
+    cursor: pointer;
+    border: 1px solid #FF2905;
+}
+.header .search-icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 7%;
+    color: #a6a6aa;
+    font-size: 1.4rem;
+    /* margin-top: 1rem; */
+}
+.menu-icon{
+    display: none;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 6%;
+    color: #a6a6aa;
+    font-size: 2rem;
+    z-index: 1;
+    cursor: pointer;
+    /* margin-top: 1rem; */
+}
+.user{
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+    color: #868689;
+}
+.user-icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    padding: .5rem;
+    font-size: 1.5rem;
+    border: .1px solid #a6a6aa;
+    margin-right: 1rem;
+}
+.lower-nav .categories, .cart{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background-color: #cc20056e;
+    padding: 1rem 1rem;
+    font-weight: 900;
+    position: relative;
+}
+.cart{
+    flex-direction: column;
+    position: relative;
+    /* overflow-y: scroll; */
+}
+.header .categories:hover, .cart:hover{
+    background-color: #cc2005;
+    cursor: pointer;
+}
+.dropdown-icon, .cart-icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    
+}
+.mobile-nav{
+    display: none;
+    justify-content: space-evenly;
+    align-items: center;
+    font-size: 1.5rem;
+    background-color: #FFFFFF;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+.mobile-cart{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FF2905;
+    color: white;
+    border-radius: 50%;
+    padding: 1rem;
+    position: relative;
+    bottom: 1rem;
+}
+.cart-items-show{
+    display: flex;
+    gap: 1rem;
+}
+.cart-overlay{
+    position: absolute;
+    top: 100%;
+    right: 0;
+    min-width: 200%;
+    background-color: white;
+    color: black;
+}
+.cart .tag-name{
+    font-size: 1.1rem;
+}
+.cart-name-price{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.cart-scroll{
+    overflow-y: scroll;
+    max-height: 20rem;
+}
+.added-cart-item{
+    display: flex;
+    padding: 1rem;
+    gap: 1rem;
+    align-items: center;
+    width: 100%;
+}
+.added-cart-content{
+    display: flex;
+    justify-content: space-between;
+}
+.delete-icon{
+    font-size: 1.8rem;
+    color: #FF2905;
+    cursor: pointer;
+}
+.added-cart-name{
+    font-size: .9rem;
+}
+.added-cart-price-quantity{
+    font-size: .9rem;
+    color: gray;
+}
+.added-cart-image img{
+    width: 4rem;
+    height: 4rem;
+    object-fit: cover;
+}
+.cart-total{
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    
+}
+.view-cart-btn{
+    padding: .5rem 1rem;
+    border-radius: 1rem;
+    outline: none;
+    border: none;
+    background-color: green;
+    color: white;
+    cursor: pointer;
+    margin: 1rem 0 1rem 35%;
+}
+.mobile-nav .a{
+    color: black;
+    text-decoration: none;
+    font-style: normal;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.mobile-navs .a{
+    color: red;
+    text-decoration: none;
+    font-style: normal;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.mobile-navs .a span{
+    font-size: .8rem;
+    text-decoration: none;
+}
+.mobile-nav .a span{
+    font-size: .8rem;
+    text-decoration: none;
+}
+@media (width>800px) {
+    .drawer{
+        display: none;
+    }
+    
+}
+@media (width < 800px) {
+    .upper-nav .user{
+        display: none;
+    }
+    .cat-cat{
+        gap: .5rem;
+    }
+    .user{
+        flex-direction: column;
+        gap: 1rem;
+        padding: 2rem;
+        padding-right: 10rem;
+        align-items: flex-start;
+    }
+    .mobile-nav{
+        display: flex;
+    }
+    .mobile-navs{
+        display: none;
+    }
+    #search-bar{
+        padding-left: 2.8rem;
+    }
+    .search-icon{
+        right: 8%;
+    }
+    .menu-icon{
+        left: 7%;
+        display: flex;
+    }
+}
+
+@media (width < 500px) {
+    .upper-nav, .lower-nav{
+        width: 100%;
+        margin: 0;
+        gap: .5rem;
+
+    }
+    .upper-nav{
+        padding-left: 1rem;
+    }
+}
+@media (width < 330px) {
+    .lower-nav{
+        flex-direction: column;
+    }
+    .cart-overlay{
+        min-width: 100%;
+    }
+    .categories, .cart{
+        width: 100%;
+        text-align: center;
+    }
+}

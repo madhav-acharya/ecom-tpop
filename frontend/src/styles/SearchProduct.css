@@ -1,0 +1,504 @@
+/* Main container */
+.search-container {
+    width: calc(100% - 20rem);
+    margin: 0 auto;
+    /* padding: 30px 20px; */
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+  }
+  
+  /* Search header */
+  .search-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .search-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    background: linear-gradient(90deg, #3e5ff3, #5b78ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+    display: inline-block;
+  }
+  
+  .search-header h1::after {
+    content: '';
+    position: absolute;
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, #3e5ff3, #5b78ff);
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 2px;
+  }
+  
+  .search-header p {
+    font-size: 1.1rem;
+    color: #666;
+  }
+  
+  /* Search bar */
+  .search-bar-container {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto 40px;
+    border-radius: 50px;
+    background-color: #f8f9fa;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    padding: 8px 20px;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+  }
+  
+  .search-bar-container.focused {
+    border-color: #5b78ff;
+    box-shadow: 0 6px 20px rgba(91, 120, 255, 0.15);
+    transform: translateY(-2px);
+  }
+  
+  .search-icon {
+    color: #5b78ff;
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+  }
+  
+  .search-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 1.1rem;
+    padding: 12px 0;
+    color: #333;
+    outline: none;
+  }
+  
+  .search-input::placeholder {
+    color: #aaa;
+  }
+  
+  .clear-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #999;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    transition: color 0.2s;
+  }
+  
+  .clear-button:hover {
+    color: #ff4d6d;
+  }
+  
+  /* Filter section */
+  .filter-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-bottom: 40px;
+    padding: 25px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  }
+  
+  .search-container .categories, .price-filter, .brands-filter, .rating-filter {
+    flex: 1;
+    min-width: 250px;
+  }
+  
+  .categories h3, .price-filter h3, .brands-filter h3, .rating-filter h3 {
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #444;
+  }
+  
+  .categories h3 svg, .price-filter h3 svg, .brands-filter h3 svg, .rating-filter h3 svg {
+    margin-right: 10px;
+    color: #5b78ff;
+  }
+  
+  .category-buttons, .brand-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .category-button, .brand-button {
+    background-color: #f8f9fa;
+    border: 1px solid #e4e6eb;
+    border-radius: 30px;
+    padding: 8px 16px;
+    font-size: 0.95rem;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .category-button:hover, .brand-button:hover {
+    background-color: #f0f2ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(91, 120, 255, 0.1);
+  }
+  
+  .category-button.active, .brand-button.active {
+    background-color: #5b78ff;
+    color: white;
+    border-color: #5b78ff;
+  }
+  
+  /* Price range filter */
+  .price-inputs {
+    display: flex;
+    align-items: center;
+  }
+  
+  .price-input-container {
+    position: relative;
+    width: 100px;
+  }
+  
+  .dollar-sign {
+    position: absolute;
+    left: 15px;
+    top: 35%;
+    transform: translateY(-50%);
+    color: black;
+    font-weight: bold;
+  }
+  
+  .price-input-container input {
+    width: 130%;
+    padding: 10px 10px 10px 30px;
+    border: 1px solid #e4e6eb;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #333;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  
+  .price-input-container input:focus {
+    border-color: #5b78ff;
+  }
+  
+  .price-input-container label {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.8rem;
+    color: #777;
+    text-align: center;
+  }
+  
+  .price-range-divider {
+    width: 15px;
+    height: 2px;
+    background-color: #ccc;
+    margin: 0 15px;
+  }
+  
+  /* Rating filter */
+  .rating-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .rating-button {
+    display: flex;
+    align-items: center;
+    background-color: #f8f9fa;
+    border: 1px solid #e4e6eb;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .rating-button span {
+    margin-left: 5px;
+    font-size: 0.8rem;
+  }
+  
+  .rating-button:hover {
+    background-color: #f0f2ff;
+    transform: translateX(2px);
+  }
+  
+  .rating-button.active {
+    background-color: #f0f2ff;
+    border-color: #5b78ff;
+    color: #5b78ff;
+  }
+  
+  .rating-button svg.filled {
+    color: #ffb954;
+  }
+  
+  /* Search results section */
+  .search-results {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  }
+  
+  .search-results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .search-results-header h2 {
+    display: flex;
+    align-items: center;
+    font-size: 1.4rem;
+    color: #333;
+  }
+  
+  .search-results-header h2 svg {
+    margin-right: 10px;
+    color: #5b78ff;
+  }
+  
+  .results-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .results-count {
+    font-size: 0.95rem;
+    color: #666;
+    background-color: #f0f2ff;
+    padding: 5px 12px;
+    border-radius: 20px;
+  }
+  
+  .sort-controls {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .sort-button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background-color: #f8f9fa;
+    border: 1px solid #e4e6eb;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .sort-button:hover {
+    background-color: #f0f2ff;
+  }
+  
+  .sort-button.active {
+    background-color: #5b78ff;
+    color: white;
+    border-color: #5b78ff;
+  }
+  
+  .sort-button svg {
+    margin-left: 5px;
+  }
+  
+  /* Product grid */
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 25px;
+  }
+  
+  /* No results */
+  .no-results {
+    text-align: center;
+    padding: 50px 20px;
+  }
+  
+  .no-results svg {
+    color: #ccd;
+    margin-bottom: 20px;
+  }
+  
+  .no-results p {
+    font-size: 1.2rem;
+    color: #888;
+    margin-bottom: 20px;
+  }
+  
+  .reset-button {
+    background-color: #5b78ff;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 30px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .reset-button:hover {
+    background-color: #3e5ff3;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(91, 120, 255, 0.3);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .search-header h1 {
+      font-size: 2rem;
+    }
+    
+    .search-results-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    
+    .results-actions {
+      width: 100%;
+      justify-content: space-between;
+    }
+    
+    .product-grid {
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+  }
+  
+  @media (max-width: 576px) {
+
+    .search-bar-container {
+      padding: 5px 15px;
+    }
+    
+    .search-input {
+      font-size: 1rem;
+      padding: 10px 0;
+    }
+    
+    .filter-section {
+      padding: 20px 15px;
+    }
+    
+    .product-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    
+    .product-image {
+      height: 180px;
+    }
+  }
+  
+  /* Animation for product cards */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .product-card {
+    animation: fadeInUp 0.5s ease forwards;
+  }
+  
+  .product-grid .product-card:nth-child(1) { animation-delay: 0.05s; }
+  .product-grid .product-card:nth-child(2) { animation-delay: 0.1s; }
+  .product-grid .product-card:nth-child(3) { animation-delay: 0.15s; }
+  .product-grid .product-card:nth-child(4) { animation-delay: 0.2s; }
+  .product-grid .product-card:nth-child(5) { animation-delay: 0.25s; }
+  .product-grid .product-card:nth-child(6) { animation-delay: 0.3s; }
+  .product-grid .product-card:nth-child(7) { animation-delay: 0.35s; }
+  .product-grid .product-card:nth-child(8) { animation-delay: 0.4s; }
+  
+  /* Decorative elements */
+  .search-container::before {
+    content: '';
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, #5b78ff 0%, #3e5ff3 100%);
+    opacity: 0.06;
+    border-radius: 120px;
+    z-index: -1;
+  }
+  
+  .search-container::after {
+    content: '';
+    position: absolute;
+    bottom: 60px;
+    left: 50px;
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #ff4d6d 0%, #ff707a 100%);
+    opacity: 0.06;
+    border-radius: 80px;
+    z-index: -1;
+  }
+  @media (width <500px)
+  {
+    .search-container .products {
+        width: 100%;
+        min-width: 100%;
+        padding: 0 1rem;
+        margin: 0 0;
+    }
+    .search-container{
+        width: 100%;
+        min-width: 100%;
+        padding: 0 1rem;
+        margin: 0 0;
+    }
+    .search-container .product-container {
+        width: 100%;
+        min-width: 100%;
+        padding: 0 1rem;
+
+    }
+    .search-container::after, .search-container::before {
+        display: none;
+    }
+  }
+  
+  /* Pulsing animation for search icon when typing */
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  .search-bar-container.focused .search-icon svg {
+    animation: pulse 1.5s infinite;
+  }
+  
