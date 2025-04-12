@@ -8,6 +8,7 @@ import '../styles/Product.css';
 import { Link } from 'react-router-dom';
 import { User, Edit, MapPin, Mail, Phone, Package, Heart, ArrowLeft, LogOut, Camera } from 'lucide-react';
 import { updateImage } from '../app/api/authAPI';
+import { useUpdateUserByIdMutation } from '../app/api/authAPI';
     
     const mockOrders = [
       { 
@@ -35,6 +36,7 @@ import { updateImage } from '../app/api/authAPI';
     const UserProfile = () => {
       const [activeTab, setActiveTab] = useState('profile');
       const [editMode, setEditMode] = useState(false);
+      const [updateUser] = useUpdateUserByIdMutation();
       const fileInputRef = useRef(null);
       const [profileImage, setProfileImage] = useState(null);
       const { data: user, isSuccess } = useGetCurrentUserQuery();
@@ -85,6 +87,13 @@ import { updateImage } from '../app/api/authAPI';
       const handleEditToggle = () => {
         if (editMode) {
           setUserData(editedUserData);
+          updateUser({id: userId, userData: editedUserData})
+            .then((response) => {
+              console.log("User updated successfully", response);
+            })
+            .catch((error) => {
+              console.error("Error updating user", error);
+            });
         } else {
           setEditedUserData({...userData});
         }
