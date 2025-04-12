@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema({
     trim: true,
     match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please provide a valid email']
   },
+  profileImage: {
+    type: String,
+    default: './no-image.jpg'
+  },
   phoneNumber: {
     countryCode: {
       type: String,

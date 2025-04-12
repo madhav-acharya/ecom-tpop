@@ -5,12 +5,13 @@ import { toast } from 'react-toastify';
 
 
 const API_URL = "http://localhost:3001/api/users";
-const token = localStorage.getItem("token");
+
 
 const baseQuery = fetchBaseQuery({
   baseUrl: API_URL,
   credentials: "include",
   prepareHeaders: (headers) => {
+    const token = localStorage.getItem("token");
     if (token) {
       headers.set('Authorization', `Bearer ${token}`);
     }
@@ -21,12 +22,13 @@ const baseQuery = fetchBaseQuery({
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
+  const isOnAuthPage = ['/login', '/signup'].includes(window.location.pathname);
 
-  if (result.error && result.error.status === 401 && (window.location.pathname !== '/login' && window.location.pathname !== '/signup')) {
+  if (result.error?.status === 401 && !isOnAuthPage) {
     console.log('Unauthorized! Redirecting to login...');
     localStorage.clear();
-    window.location.href = '/login';
     toast.error('Session expired. Please log in again.');
+    window.location.href = '/login';
   }
 
   return result;
@@ -44,8 +46,19 @@ export const authAPI = createApi({
       query: (id) => `/get/${id}`,
     }),
     getCurrentUser: builder.query({
-      query: () => 'get/me',
+      query: () => '/get/me',
       providesTags: ['User'],
+    }),
+    updateImageById: builder.mutation({
+      query: ({ id, imageFormData }) => ({
+        url: `update/image/${id}`,
+        method: 'PUT',
+        body: imageFormData,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }),
+      invalidatesTags: ['User'],
     }),
     updateUserById: builder.mutation({
       query: ({ id, userData }) => ({
@@ -69,7 +82,9 @@ export const authAPI = createApi({
 
 export const signup = createAsyncThunk('user/signup', async (userData, { rejectWithValue }) => {
   try {
+    console.log("userData",userData)
     const { data } = await axios.post(`${API_URL}/signup`, userData);
+    console.log("data",data)
     return data;
   } catch (error) {
     console.log("Error Occured while registering user");
@@ -93,11 +108,11 @@ export const logout = createAsyncThunk("auth/logout", async () => {
   window.location.href = "/login";
 });
 
-export const updateImage = async ({userId, imageFormData}) => {
+export const updateImage = async ({id, imageFormData}) => {
   try
   {
     const response = await axios.put(
-        `http://localhost:3001/api/users/update/image/${userId}`,
+        `http://localhost:3001/api/users/update/image/${id}`,
         imageFormData,
         {
           headers: {

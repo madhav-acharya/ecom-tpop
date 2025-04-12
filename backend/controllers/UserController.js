@@ -1,5 +1,6 @@
 import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
+import cloudinary from '../config/cloudinary.js';
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -10,8 +11,8 @@ const generateToken = (id) => {
 export const signup = async (req, res) => {
   try {
     const { firstName, lastName, email, number, password, confirmPassword, countryCode } = req.body;
-
     if (password !== confirmPassword) {
+      console.log("Passwords do not match");
       return res.status(400).json({
         success: false,
         message: 'Passwords do not match'
@@ -19,6 +20,7 @@ export const signup = async (req, res) => {
     }
 
     const existingUserByEmail = await User.findOne({ email });
+    console.log("this email is already registered");
     if (existingUserByEmail) {
       return res.status(400).json({
         success: false,
@@ -28,6 +30,7 @@ export const signup = async (req, res) => {
 
     const existingUserByPhone = await User.findOne({ 'phoneNumber.number': number });
     if (existingUserByPhone) {
+      console.log("This phone number is already registered");
       return res.status(400).json({
         success: false,
         message: 'Phone number already registered'
@@ -138,7 +141,11 @@ export const currentUser = async (req, res) => {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        phoneNumber: user.phoneNumber
+        phoneNumber: user.phoneNumber,
+        profileImage: user.profileImage,
+        role: user.role,
+        billingAddress: user.billingAddress,
+        shippingAddress: user.shippingAddress,
       }
     });
   } catch (error) {
@@ -196,6 +203,33 @@ export const updateUser = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const uploadImage = async (req, res) => {
+  const userId = req?.params?.id;
+  const profileImage = req.file ? `/uploads/${req.file.filename}` : "";
+  
+  try {
+    if (!profileImage) {
+      return res.status(400).json({ message: "No profile picture uploaded" });
+    }
+    const imageFilePath = req.file.path;
+    const result = await cloudinary.uploader.upload(imageFilePath, {
+      folder: "tpop/users",
+      resource_type: "image"
+    });
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { profileImage: result.secure_url },
+      { new: true }
+    );
+
+    res.status(200).json(updatedUser);
+  } catch (err) {
+    console.error("Error updating profile picture:", err);
+    res.status(500).json({ message: "Error updating profile picture" });
+  }
+};
+
 
 export const deleteUser = async (req, res) => {
   try {

@@ -24,16 +24,19 @@ import { useGetCategoriesQuery } from '../app/api/categoryAPI';
 import { useGetCurrentUserQuery } from '../app/api/authAPI';
 import { setSearchTerm } from '../app/features/search/searchSlice';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 
 function Header() {
+    const location = useLocation();
+    const isAuthPage = ['/login', '/signup'].includes(location.pathname);
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const searchTerm = useSelector((state) => state.search.searchTerm);
     const dispatch = useDispatch();
     const [showCategories, setShowCategories] = useState(false);
     const carts = useSelector(selectCartItems);
-    const user = useGetCurrentUserQuery();
+    const user = useGetCurrentUserQuery(undefined, { skip: isAuthPage });
     const cartTotal = useSelector(selectCartTotal);
     const cartCount = useSelector(selectCartItemCount);
     const [showCart, setShowCart] = useState(false);
@@ -43,7 +46,7 @@ function Header() {
         setOpen(newOpen);
     };
     useEffect(() => {
-        if (carts?.status === 'idle') {
+        if (carts?.status === 'idle' && !isAuthPage) {
             dispatch(fetchCart());
         }
         if (carts?.status === 'failed') {
@@ -52,7 +55,7 @@ function Header() {
     }, [dispatch, carts]);
 
     useEffect(() => {
-        if (user?.isSuccess === false) {
+        if (user?.isSuccess === false && !isAuthPage) {
             dispatch(fetchCart());
         }
     }, [dispatch, user]);
