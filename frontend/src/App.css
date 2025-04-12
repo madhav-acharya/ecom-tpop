@@ -15,6 +15,13 @@
   justify-content: center;
   align-items: center;
 }
+.net-popup{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: .5rem;
+
+}
 @media (width >= 1700px) {
   .product-container{
       min-width: 1600px;

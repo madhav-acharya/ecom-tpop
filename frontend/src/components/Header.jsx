@@ -147,7 +147,7 @@ function Header() {
                         {carts?.cartItems?.length>0?carts?.cartItems?.map((cart)=>(
                         <div className="added-cart-item" key={cart?._id}>
                             <div className="added-cart-image">
-                                <img src="./no-image.jpg" alt="product" />
+                                <img src={cart?.image} alt="product" />
                             </div>
                             <div className="added-cart-content">
                                 <div className="cart-name-price">

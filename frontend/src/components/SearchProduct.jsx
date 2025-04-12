@@ -86,9 +86,6 @@ const SearchProduct = () => {
 
   return (
     <div className="search-container">
-      <header className="search-header">
-        <p>Find your perfect product with our advanced search</p>
-      </header>
 
       <div className="search-filters-container">
         <div className="filters-section">

@@ -14,12 +14,13 @@ import ManageProduct from './components/ManageProduct';
 import Categories from './components/Categories';
 import Users from './components/Users';
 import Orders from './components/Orders';
-
 import { Routes, Route } from "react-router-dom";
+import NetworkStatus from './components/NetworkStatus';
 
 function App() {
   return (
     <div className="App">
+        <NetworkStatus />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginPage />} />

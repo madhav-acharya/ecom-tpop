@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingBag, CreditCard, Check, ArrowLeft } from 'lucide-react';
+import { ShoppingBag, Check, ArrowLeft } from 'lucide-react';
 import '../styles/Checkout.css';
 import { fetchCart } from "../app/api/cartAPI";
 import { useSelector, useDispatch } from "react-redux";
@@ -87,8 +87,8 @@ const Checkout = () => {
     }, [dispatch, carts]);
 
   const calculateSubtotal = () => {
-    return cartItems.reduce(
-      (total, item) => total + item.price * item.quantity,
+    return cartItems?.reduce(
+      (total, item) => total + item?.price * item?.quantity,
       0
     );
   };
@@ -117,35 +117,23 @@ const Checkout = () => {
     const errors = {};
     
     if (stepNumber === 1) {
-      if (!formData.firstName) errors.firstName = 'First name is required';
-      if (!formData.lastName) errors.lastName = 'Last name is required';
-      if (!formData.email) {
+      if (!formData?.firstName) errors.firstName = 'First name is required';
+      if (!formData?.lastName) errors.lastName = 'Last name is required';
+      if (!formData?.email) {
         errors.email = 'Email is required';
-      } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      } else if (!/\S+@\S+\.\S+/.test(formData?.email)) {
         errors.email = 'Email address is invalid';
       }
-      if (!formData.shippingAddress) errors.shippingAddress = 'Address is required';
-      if (!formData.billingAddress) errors.billingAddress = 'Billing address is required';
-      if (!formData.district) errors.district = 'District is required';
-      if (!formData.city) errors.city = 'City is required';
-      if (!formData.state) errors.state = 'State is required';
-      if (!formData.phoneNumber) errors.phoneNumber = 'Phone number is required';
+      if (!formData?.shippingAddress) errors.shippingAddress = 'Address is required';
+      if (!formData?.billingAddress) errors.billingAddress = 'Billing address is required';
+      if (!formData?.district) errors.district = 'District is required';
+      if (!formData?.city) errors.city = 'City is required';
+      if (!formData?.state) errors.state = 'State is required';
+      if (!formData?.phoneNumber) errors.phoneNumber = 'Phone number is required';
     }
     
     if (stepNumber === 2) {
-      if (!formData.isChecked) errors.isChecked = 'Please accept the payment method';
-      // if (!formData.cardName) errors.cardName = 'Name on card is required';
-      // if (!formData.cardNumber) {
-      //   errors.cardNumber = 'Card number is required';
-      // } else if (formData.cardNumber.replace(/\s/g, '').length !== 16) {
-      //   errors.cardNumber = 'Card number must be 16 digits';
-      // }
-      // if (!formData.expDate) errors.expDate = 'Expiration date is required';
-      // if (!formData.cvv) {
-      //   errors.cvv = 'CVV is required';
-      // } else if (formData.cvv.length !== 3) {
-      //   errors.cvv = 'CVV must be 3 digits';
-      // }
+      if (!formData?.isChecked) errors.isChecked = 'Please accept the payment method';
     }
     
     return errors;
@@ -247,10 +235,10 @@ const Checkout = () => {
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleChange}
-                    className={formErrors.firstName ? 'error' : ''}
+                    className={formErrors?.firstName ? 'error' : ''}
                   />
-                  {formErrors.firstName && (
-                    <div className="error-message">{formErrors.firstName}</div>
+                  {formErrors?.firstName && (
+                    <div className="error-message">{formErrors?.firstName}</div>
                   )}
                 </div>
                 
@@ -264,8 +252,8 @@ const Checkout = () => {
                     onChange={handleChange}
                     className={formErrors.lastName ? 'error' : ''}
                   />
-                  {formErrors.lastName && (
-                    <div className="error-message">{formErrors.lastName}</div>
+                  {formErrors?.lastName && (
+                    <div className="error-message">{formErrors?.lastName}</div>
                   )}
                 </div>
               </div>
@@ -278,10 +266,10 @@ const Checkout = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className={formErrors.email ? 'error' : ''}
+                  className={formErrors?.email ? 'error' : ''}
                 />
-                {formErrors.email && (
-                  <div className="error-message">{formErrors.email}</div>
+                {formErrors?.email && (
+                  <div className="error-message">{formErrors?.email}</div>
                 )}
               </div>
               
@@ -293,10 +281,10 @@ const Checkout = () => {
                   name="billingAddress"
                   value={formData.billingAddress}
                   onChange={handleChange}
-                  className={formErrors.billingAddress ? 'error' : ''}
+                  className={formErrors?.billingAddress ? 'error' : ''}
                 />
-                {formErrors.billingAddress && (
-                  <div className="error-message">{formErrors.billingAddress}</div>
+                {formErrors?.billingAddress && (
+                  <div className="error-message">{formErrors?.billingAddress}</div>
                 )}
               </div>
               <div className="form-group">
@@ -307,10 +295,10 @@ const Checkout = () => {
                   name="shippingAddress"
                   value={formData.shippingAddress}
                   onChange={handleChange}
-                  className={formErrors.shippingAddress ? 'error' : ''}
+                  className={formErrors?.shippingAddress ? 'error' : ''}
                 />
                 {formErrors.shippingAddress && (
-                  <div className="error-message">{formErrors.shippingAddress}</div>
+                  <div className="error-message">{formErrors?.shippingAddress}</div>
                 )}
               </div>
 
@@ -322,10 +310,10 @@ const Checkout = () => {
                     name="phoneNumber"
                     value={formData.phoneNumber}
                     onChange={handleChange}
-                    className={formErrors.zipCode ? 'error' : ''}
+                    className={formErrors?.phoneNumber ? 'error' : ''}
                   />
-                  {formErrors.phoneNumber && (
-                    <div className="error-message">{formErrors.phoneNumber}</div>
+                  {formErrors?.phoneNumber && (
+                    <div className="error-message">{formErrors?.phoneNumber}</div>
                   )}
                 </div>
                 
@@ -337,12 +325,12 @@ const Checkout = () => {
                     type="text"
                     id="city"
                     name="city"
-                    value={formData.city}
+                    value={formData?.city}
                     onChange={handleChange}
-                    className={formErrors.city ? 'error' : ''}
+                    className={formErrors?.city ? 'error' : ''}
                   />
                   {formErrors.city && (
-                    <div className="error-message">{formErrors.city}</div>
+                    <div className="error-message">{formErrors?.city}</div>
                   )}
                 </div>
                 
@@ -363,7 +351,7 @@ const Checkout = () => {
 
                 <div className="form-group">
                 <label for="district">Select District:</label>
-                    <select id="district" name="district" onChange={handleChange} className={formErrors.district ? 'error' : ''}>
+                    <select id="district" name="district" onChange={handleChange} className={formErrors?.district ? 'error' : ''}>
                       <option value="">Select District</option>
                       {districtsOfNepal.map((district, index) => (
                         <option key={index} value={district}>
@@ -372,7 +360,7 @@ const Checkout = () => {
                       ))}
                     </select>
                   {formErrors.district && (
-                    <div className="error-message">{formErrors.district}</div>
+                    <div className="error-message">{formErrors?.district}</div>
                   )}
                 </div>
 
@@ -403,13 +391,13 @@ const Checkout = () => {
                     checked={formData?.isChecked}
                     onChange={handleChange}
                     name="isChecked"
-                    className={formErrors.isChecked ? 'error' : ''}
+                    className={formErrors?.isChecked ? 'error' : ''}
                   />
                   <span className="checkmark"></span>
                   Cash on Delivery
                 </label>
-                {formErrors.isChecked && (
-                  <div className="error-message">{formErrors.isChecked}</div>
+                {formErrors?.isChecked && (
+                  <div className="error-message">{formErrors?.isChecked}</div>
                 )}
               </div>
               
@@ -435,7 +423,7 @@ const Checkout = () => {
               <div className="confirmation-details">
                 <div className="confirmation-detail">
                   <span>Order Number:</span>
-                  <span>#OD{Math.floor(10000 + Math.random() * 90000)}</span>
+                  <span>#OD{Math?.floor(10000 + Math?.random() * 90000)}</span>
                 </div>
                 <div className="confirmation-detail">
                   <span>Estimated Delivery:</span>
@@ -452,14 +440,14 @@ const Checkout = () => {
         <div className="order-summary">
           <h2>Order Summary</h2>
           <div className="order-items">
-            {cartItems.map((item) => (
-              <div className="order-item" key={item._id}>
-                <img src={item.image} alt={item?.name} className="order-item-image" />
+            {cartItems?.map((item) => (
+              <div className="order-item" key={item?._id}>
+                <img src={item?.image} alt={item?.name} className="order-item-image" />
                 <div className="order-item-details">
-                  <h4>{item.name}</h4>
+                  <h4>{item?.name}</h4>
                   <div className="order-item-meta">
                     <span className="order-item-quantity">Qty: {item?.quantity}</span>
-                    <span className="order-item-price">Rs{(item?.price * item?.quantity).toFixed(2)}</span>
+                    <span className="order-item-price">Rs{(item?.price * item?.quantity)?.toFixed(2)}</span>
                   </div>
                 </div>
               </div>
@@ -469,19 +457,19 @@ const Checkout = () => {
           <div className="order-totals">
             <div className="order-total-row">
               <span>Subtotal</span>
-              <span>Rs{subtotal.toFixed(2)}</span>
+              <span>Rs{subtotal?.toFixed(2)}</span>
             </div>
             <div className="order-total-row">
               <span>Shipping</span>
-              <span>Rs{shipping.toFixed(2)}</span>
+              <span>Rs{shipping?.toFixed(2)}</span>
             </div>
             <div className="order-total-row">
               <span>Tax</span>
-              <span>Rs{tax.toFixed(2)}</span>
+              <span>Rs{tax?.toFixed(2)}</span>
             </div>
             <div className="order-total-row grand-total">
               <span>Total</span>
-              <span>Rs{total.toFixed(2)}</span>
+              <span>Rs{total?.toFixed(2)}</span>
             </div>
           </div>
         </div>
