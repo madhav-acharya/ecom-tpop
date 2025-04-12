@@ -18,6 +18,8 @@ import { Routes, Route } from "react-router-dom";
 import NetworkStatus from './components/NetworkStatus';
 
 function App() {
+  console.log("url",process.env.REACT_APP_API_URL)
+  console.log("ENV",process.env.NODE_ENV)
   return (
     <div className="App">
         <NetworkStatus />

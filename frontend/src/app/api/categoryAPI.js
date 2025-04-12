@@ -1,7 +1,7 @@
 
 
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-const API_URL = `${process.env.REACT_APP_API_URL}/api/categories/`;
+const API_URL = `${process.env.REACT_APP_API_URL}/categories`;
 
 
 export const categoryAPI = createApi({

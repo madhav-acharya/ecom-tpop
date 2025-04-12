@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-const API_URL = `${process.env.REACT_APP_API_URL}/api/products/`;
+const API_URL = `${process.env.REACT_APP_API_URL}/products/`;
 
 
 export const productAPI = createApi({

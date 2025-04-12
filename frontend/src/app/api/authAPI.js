@@ -4,7 +4,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 
 
-const API_URL = `${process.env.REACT_APP_API_URL}/api/users/`;
+const API_URL = `${process.env.REACT_APP_API_URL}/users`;
 
 
 const baseQuery = fetchBaseQuery({
