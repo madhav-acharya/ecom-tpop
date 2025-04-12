@@ -34,7 +34,6 @@ export const addProduct = async (req, res) => {
       category,
       countInStock,
       isInStock,
-      reviews,
       rating,
     } = req.body;
 
@@ -62,7 +61,6 @@ export const addProduct = async (req, res) => {
       category,
       countInStock,
       isInStock,
-      reviews,
       rating,
     });
 

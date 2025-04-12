@@ -175,7 +175,7 @@ function Header() {
                         <Link to="/cart"><button className="view-cart-btn">
                             View Cart
                         </button></Link>
-                        </>: <Link to="/product"><button className="view-cart-btn">
+                        </>: <Link to="/"><button className="view-cart-btn">
                             Shop Now
                         </button></Link>}
                     </div>}

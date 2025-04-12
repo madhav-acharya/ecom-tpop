@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchCart } from "../app/api/cartAPI";
 import { selectCartItems } from "../app/features/cart/cartSlice";
 import { removeFromCart, updateCartItem } from "../app/api/cartAPI";
+import { AiFillDelete } from "react-icons/ai";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -77,7 +78,7 @@ const Cart = () => {
                 />
                 <div className="item-details">
                   <h3>{item?.name}</h3>
-                  <p className="item-price">Rs{item?.price?.toFixed(2)}</p>
+                  <p className="item-price">Rs {item?.price?.toFixed(2)}</p>
                   <div className="item-actions">
                     <div className="quantity-controls">
                       <button
@@ -95,17 +96,19 @@ const Cart = () => {
                         <Plus size={16} />
                       </button>
                     </div>
-                    <button
-                      className="remove-btn"
-                      onClick={() => handleRemoveItem(item?._id)}
-                    >
-                      <Trash2 size={16} />
-                      Remove
-                    </button>
                   </div>
                 </div>
                 <div className="item-total">
-                  Rs{(item?.price * item?.quantity)?.toFixed(2)}
+                  <span>
+                  Rs {(item?.price * item?.quantity)?.toFixed(2)}
+                  </span>
+                  <button
+                    className="remove-btn"
+                    onClick={() => handleRemoveItem(item?._id)}
+                  >
+                    <AiFillDelete size={30} />
+                    Remove
+                  </button>
                 </div>
               </div>
             ))}

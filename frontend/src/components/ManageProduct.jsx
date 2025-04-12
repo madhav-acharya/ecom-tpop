@@ -18,26 +18,18 @@ import { useGetProductsQuery } from '../app/api/productAPI';
 import { useAddProductMutation } from '../app/api/productAPI';
 import { useUpdateProductMutation } from '../app/api/productAPI';
 import { useDeleteProductMutation } from '../app/api/productAPI';
-import { useUploadProductsMutation } from '../app/api/productAPI';
-
-const categories = [
-  'Electronics',
-  'Clothing',
-  'Footwear',
-  'Home & Kitchen',
-  'Fitness',
-  'Books',
-  'Toys'
-];
+import { useGetCategoriesQuery } from '../app/api/categoryAPI';
 
 const Products = () => {
   const { data: initialProducts, isSuccess, refetch } = useGetProductsQuery();
-  const [addProduct, { isSuccess: isAddSuccess }] = useAddProductMutation();
-  const [updateProduct, { isSuccess: isUpdateSuccess }] = useUpdateProductMutation();
-  const [deleteProduct, { isSuccess: isDeleteSuccess }] = useDeleteProductMutation();
+  const [addProduct] = useAddProductMutation();
+  const [updateProduct] = useUpdateProductMutation();
+  const [deleteProduct] = useDeleteProductMutation();
   const [products, setProducts] = useState(initialProducts);
+  const { data: categoriess, isSuccess: gotCategories } = useGetCategoriesQuery();
   const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+  const [categories, setCategories] = useState([]);
   const [images, setImages] = useState([]);
   const [formData, setFormData] = useState({
     name: '',
@@ -52,6 +44,14 @@ const Products = () => {
     countInStock: 0
   });
   const [imagePreviewUrls, setImagePreviewUrls] = useState([]);
+
+  useEffect(() => {
+    if (gotCategories) {
+      setCategories(categoriess);
+      console.log("categories", categoriess);
+    }
+  }, [gotCategories, categoriess]);
+
 
   useEffect(() => {
     if (isSuccess) {
@@ -385,7 +385,7 @@ const Products = () => {
                       >
                         <option value="">Select Category</option>
                         {categories?.map(category => (
-                          <option key={category} value={category}>{category}</option>
+                          <option key={category?._id} value={category?.name}>{category?.name}</option>
                         ))}
                       </select>
                     </div>

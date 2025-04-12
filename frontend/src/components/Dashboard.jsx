@@ -24,7 +24,6 @@ import {
 import { Link } from 'react-router-dom';
 import '../styles/Admin.css';
 
-// Sample data for charts
 const salesData = [
   { name: 'Jan', sales: 4000 },
   { name: 'Feb', sales: 3000 },

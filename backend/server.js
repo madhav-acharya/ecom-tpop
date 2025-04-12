@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import connectDB from './connection/connectDB.js';
-import userRoutes from './routes/userRoutes.js';
+import UserRoutes from './routes/UserRoutes.js';
 import CartRoutes from './routes/CartRoutes.js';
 import FavoriteRoutes from './routes/FavoriteRoutes.js';
 import ProductRoutes from './routes/ProductRoutes.js';
@@ -22,7 +22,7 @@ app.use(cookieParser())
 app.use(cors({origin: process.env.FRONTEND_URL, credentials: true}));
 app.use(express.static('./public'))
 
-app.use('/api/users', userRoutes);
+app.use('/api/users', UserRoutes);
 app.use('/api/cart', CartRoutes);
 app.use('/api/favorite', FavoriteRoutes);
 app.use('/api/products', ProductRoutes);

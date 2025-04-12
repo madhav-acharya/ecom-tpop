@@ -13,6 +13,7 @@
     padding-bottom: 1rem;
     border-bottom: 1px solid #e2e8f0;
   }
+
   
   .cart-header h1 {
     display: flex;
@@ -181,7 +182,7 @@
     background: none;
     border: none;
     color: #e53e3e;
-    font-size: 0.875rem;
+    font-size: 1rem;
     cursor: pointer;
     padding: 0.25rem 0.5rem;
     border-radius: 0.25rem;
@@ -197,6 +198,10 @@
     font-size: 1.125rem;
     color: #2d3748;
     white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-around;
   }
   
   .cart-summary {
@@ -265,5 +270,16 @@
   
   .continue-shopping-link:hover {
     text-decoration: underline;
+  }
+
+  @media (width < 500px) {
+    .cart-container{
+      padding: .5rem;
+      width: 100vw;
+    }
+    .cart-item{
+      padding: 0;
+      width: 90vw;
+    }
   }
   

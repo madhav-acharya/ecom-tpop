@@ -181,3 +181,10 @@
     }
   }
   
+  @media (width < 500px)
+  {
+    .carousel-container{
+      width: 100%;
+      height: 300px;
+    }
+  }
