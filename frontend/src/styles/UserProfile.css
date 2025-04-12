@@ -455,6 +455,22 @@
   color: #ff8f00;
 }
 
+.status-badge.shipped {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.status-badge.pending {
+  background-color: #fce4ec;
+  color: #c2185b;
+}
+
+.status-badge.cancelled {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+
 .order-items {
   padding: 15px;
 }

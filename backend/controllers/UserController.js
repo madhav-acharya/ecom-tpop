@@ -215,7 +215,10 @@ export const uploadImage = async (req, res) => {
     const imageFilePath = req.file.path;
     const result = await cloudinary.uploader.upload(imageFilePath, {
       folder: "tpop/users",
-      resource_type: "image"
+      resource_type: "image",
+      transformation: [
+        { quality: "auto", fetch_format: "auto" }
+      ],
     });
     const updatedUser = await User.findByIdAndUpdate(
       userId,

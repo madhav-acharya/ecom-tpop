@@ -9,32 +9,12 @@ import { Link } from 'react-router-dom';
 import { User, Edit, MapPin, Mail, Phone, Package, Heart, ArrowLeft, LogOut, Camera } from 'lucide-react';
 import { updateImage } from '../app/api/authAPI';
 import { useUpdateUserByIdMutation } from '../app/api/authAPI';
-    
-    const mockOrders = [
-      { 
-        _id: "ORD-12345", 
-        createdAt: "2023-04-01", 
-        orderStatus: "Delivered", 
-        totalAmount: 289.98,
-        products: [
-          { productId: 1, name: "Smartphone", price: 249.99, quantity: 1 },
-          { productId: 2, name: "Phone Case", price: 19.99, quantity: 2 }
-        ]
-      },
-      { 
-        _id: "ORD-67890", 
-        createdAt: "2023-03-15", 
-        orderStatus: "Processing", 
-        totalAmount: 129.99,
-        products: [
-          { productId: 3, name: "Bluetooth Speaker", price: 79.99, quantity: 1 },
-          { productId: 4, name: "Charging Cable", price: 12.99, quantity: 2 }
-        ]
-      }
-    ];
+import { useUpdateOrderMutation, useGetOrderByIdQuery } from '../app/api/orderAPI';
+
     
     const UserProfile = () => {
       const [activeTab, setActiveTab] = useState('profile');
+      const [updateOrder] = useUpdateOrderMutation();
       const [editMode, setEditMode] = useState(false);
       const [updateUser] = useUpdateUserByIdMutation();
       const fileInputRef = useRef(null);
@@ -45,7 +25,8 @@ import { useUpdateUserByIdMutation } from '../app/api/authAPI';
       const dispatch = useDispatch();
       const favorites = useSelector((state => state?.favorites));
       const [ userId, setUserId] = useState(user?.user?.id);
-      
+      const { data: orders, refetch } = useGetOrderByIdQuery(userId&& userId, {skip: !userId});
+    
       useEffect(() => {
         if (favorites?.status === "idle") {
           dispatch(fetchFavorites());
@@ -54,6 +35,14 @@ import { useUpdateUserByIdMutation } from '../app/api/authAPI';
           console.log("status failed", favorites?.error);
         }
       }, [dispatch, favorites?.status]);
+
+      useEffect(() => {
+        if (orders?.status === "idle" && orders) {
+          console.log("orders", orders);
+          refetch();
+        }
+      }, [refetch, orders]);
+
 
       useEffect(() => {
         if (isSuccess) {
@@ -121,8 +110,16 @@ import { useUpdateUserByIdMutation } from '../app/api/authAPI';
       };
     
       const handleCancelOrder = (orderId) => {
-     
-        alert(`Order ${orderId} cancellation requested`);
+        const updatedOrder = {
+          orderStatus: "Cancelled"
+        };
+        updateOrder({id: orderId, data: updatedOrder})
+          .then(() => {
+            refetch();
+          })
+          .catch((error) => {
+            console.error("Error cancelling order", error);
+          });
       };
     
       const renderProfileContent = () => {
@@ -269,7 +266,7 @@ import { useUpdateUserByIdMutation } from '../app/api/authAPI';
         return (
           <div className="orders-content">
             <h2><Package size={22} /> Order History</h2>
-            {mockOrders?.length === 0 ? (
+            {orders?.length === 0 ? (
               <div className="empty-state">
                 <Package size={48} />
                 <p>You haven't placed any orders yet</p>
@@ -277,7 +274,7 @@ import { useUpdateUserByIdMutation } from '../app/api/authAPI';
               </div>
             ) : (
               <div className="orders-list">
-                {mockOrders?.map(order => (
+                {orders?.map(order => (
                   <div className="order-card" key={order?._id}>
                     <div className="order-header">
                       <div>
@@ -295,13 +292,13 @@ import { useUpdateUserByIdMutation } from '../app/api/authAPI';
                             <p className="item-name">{item?.name}</p>
                             <p className="item-quantity">Qty: {item?.quantity}</p>
                           </div>
-                          <p className="item-price">${item?.price?.toFixed(2)}</p>
+                          <p className="item-price">Rs{item?.price?.toFixed(2)}</p>
                         </div>
                       ))}
                     </div>
                     <div className="order-footer">
-                      <p className="order-total">Total: ${order?.totalAmount?.toFixed(2)}</p>
-                      {order?.orderStatus === "Processing" && (
+                      <p className="order-total">Total: Rs{order?.totalAmount?.toFixed(2)}</p>
+                      {(order?.orderStatus === "Processing" || order?.orderStatus === "Pending") && (
                         <button 
                           className="cancel-order-button"
                           onClick={() => handleCancelOrder(order?._id)}
@@ -309,7 +306,7 @@ import { useUpdateUserByIdMutation } from '../app/api/authAPI';
                           Cancel Order
                         </button>
                       )}
-                      <button className="view-details-button">View Details</button>
+                      
                     </div>
                   </div>
                 ))}

@@ -11,6 +11,11 @@ const orderSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
   email: {
     type: String,
     required: true,

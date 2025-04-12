@@ -44,6 +44,7 @@ const Checkout = () => {
     district: '',
     city: '',
     state: '',
+    user: '',
     products: cartItems,
     isChecked: isChecked,
   });
@@ -60,6 +61,11 @@ const Checkout = () => {
       }
       if (carts?.status === "succeeded") {
         setCartItems(carts?.cartItems);
+        setFormData({
+          ...formData,
+          products: carts?.cartItems,
+          user: carts?.cartItems[0]?.userId,
+        });
       }
     }, [dispatch, carts]);
 
