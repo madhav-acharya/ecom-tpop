@@ -10,7 +10,7 @@ import { User, Edit, MapPin, Mail, Phone, Package, Heart, ArrowLeft, LogOut, Cam
 import { updateImage } from '../app/api/authAPI';
 import { useUpdateUserByIdMutation } from '../app/api/authAPI';
 import { useUpdateOrderMutation, useGetOrderByIdQuery } from '../app/api/orderAPI';
-
+import moment from 'moment';
     
     const UserProfile = () => {
       const [activeTab, setActiveTab] = useState('profile');
@@ -279,7 +279,7 @@ import { useUpdateOrderMutation, useGetOrderByIdQuery } from '../app/api/orderAP
                     <div className="order-header">
                       <div>
                         <h3>Order #{order?._id}</h3>
-                        <p className="order-date">Placed on {new Date(order?.createdAt.slice(0, 7)).toLocaleDateString()}</p>
+                        <p className="order-date">Placed on {`${moment(order?.createdAt).format('MMMM Do YYYY, h:mm:ss a')}`}</p>
                       </div>
                       <div className="order-status">
                         <span className={`status-badge ${order?.orderStatus?.toLowerCase()}`}>{order?.orderStatus}</span>

@@ -8,6 +8,7 @@ import { selectCartItems } from "../app/features/cart/cartSlice";
 import { useCreateOrderMutation } from '../app/api/orderAPI';
 import { toast } from 'react-toastify';
 import { useRemoveUsersCartMutation } from '../app/api/cartAPI';
+import { useGetCurrentUserQuery } from '../app/api/authAPI';
 
 const districtsOfNepal = [
   "Achham", "Arghakhanchi", "Baglung", "Baitadi", "Bajhang", "Bajura", "Banke",
@@ -24,15 +25,15 @@ const districtsOfNepal = [
   "Terhathum", "Udayapur", "Western Rukum"
 ];
 
-
-
 const Checkout = () => {
   const [createOrder] = useCreateOrderMutation();
   const[removeUsersCart] = useRemoveUsersCartMutation();
   const dispatch = useDispatch();
   const carts = useSelector(selectCartItems);
+  const {data: user, isSuccess} = useGetCurrentUserQuery();
   const [cartItems, setCartItems] = useState(carts?.cartItems || []);
 
+  console.log("user", user?.user);
   const [isChecked, setIsChecked] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -51,6 +52,22 @@ const Checkout = () => {
   
   const [formErrors, setFormErrors] = useState({});
   const [step, setStep] = useState(1);
+
+  useEffect(() => {
+    if (isSuccess)
+    {
+      setFormData({
+        ...formData,
+        firstName: user?.user?.firstName,
+        lastName: user?.user?.lastName,
+        email: user?.user?.email,
+        phoneNumber: user?.user?.phoneNumber?.number,
+        user: user?.user?.id,
+        billingAddress: user?.user?.billingAddress,
+        shippingAddress: user?.user?.shippingAddress,
+      });
+    }
+  }, [user, isSuccess]);
 
   useEffect(() => {
       if (carts?.status === "idle") {
