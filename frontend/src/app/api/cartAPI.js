@@ -2,7 +2,8 @@ import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-const API_URL = 'http://localhost:3001/api/cart';
+const API_URL = `${process.env.REACT_APP_API_URL}/api/cart/`;
+
 const token = localStorage.getItem('token');
 
 export const fetchCart = createAsyncThunk(

@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-const API_URL = 'http://localhost:3001/api/favorite';
+const API_URL = `${process.env.REACT_APP_API_URL}/api/favorite/`;
+
 const token = localStorage.getItem('token');
 
 export const fetchFavorites = createAsyncThunk(

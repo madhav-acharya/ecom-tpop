@@ -4,7 +4,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 
 
-const API_URL = "http://localhost:3001/api/users";
+const API_URL = `${process.env.REACT_APP_API_URL}/api/users/`;
 
 
 const baseQuery = fetchBaseQuery({
@@ -112,7 +112,7 @@ export const updateImage = async ({id, imageFormData}) => {
   try
   {
     const response = await axios.put(
-        `http://localhost:3001/api/users/update/image/${id}`,
+        `${API_URL}/update/image/${id}`,
         imageFormData,
         {
           headers: {
