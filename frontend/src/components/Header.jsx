@@ -36,9 +36,9 @@ function Header() {
     const dispatch = useDispatch();
     const [showCategories, setShowCategories] = useState(false);
     const carts = useSelector(selectCartItems);
+    const cartTotal = useSelector(selectCartTotal) || 0;
+    const cartCount = useSelector(selectCartItemCount) || 0;
     const user = useGetCurrentUserQuery(undefined, { skip: isAuthPage });
-    const cartTotal = useSelector(selectCartTotal);
-    const cartCount = useSelector(selectCartItemCount);
     const [showCart, setShowCart] = useState(false);
     const categories = useGetCategoriesQuery();
 

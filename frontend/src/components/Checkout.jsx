@@ -31,7 +31,9 @@ const Checkout = () => {
   const dispatch = useDispatch();
   const carts = useSelector(selectCartItems);
   const {data: user, isSuccess, refetch} = useGetCurrentUserQuery();
-  const [cartItems, setCartItems] = useState(carts?.cartItems || []);
+  const [cartItems, setCartItems] = useState(
+    Array.isArray(carts?.cartItems) ? carts.cartItems : []
+  );
 
   const [isChecked, setIsChecked] = useState(false);
   const [formData, setFormData] = useState({

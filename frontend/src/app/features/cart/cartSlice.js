@@ -23,7 +23,7 @@ const cartSlice = createSlice({
       .addCase(fetchCart.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.isLoading = false;
-        state.cartItems = action.payload;
+        state.cartItems = Array.isArray(action.payload) ? action.payload : [];
       })
       .addCase(fetchCart.rejected, (state, action) => {
         state.isLoading = false;
@@ -46,8 +46,7 @@ const cartSlice = createSlice({
         if (existingItem) {
           existingItem.quantity += 1;
         } else {
-          state.cartItems.push(action.payload);
-          // state.cartItems = action.payload;
+          state.cartItems = Array.isArray(state.cartItems) ? [...state.cartItems, action.payload] : [action.payload];
         }
       })
       .addCase(removeFromCart.pending, (state) => {
@@ -69,14 +68,19 @@ const cartSlice = createSlice({
       .addCase(removeFromCart.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.isLoading = false;
-        state.cartItems = state.cartItems.filter(item => item.productId !== action.payload);
+        state.cartItems = Array.isArray(state.cartItems) ? state.cartItems.filter(item => item.productId !== action.payload) : [];
       });
   }
 });
 export const { clearCart } = cartSlice.actions;
 export const selectCartItems = (state) => state.cart;
 export const selectCartTotal = (state) => 
-  state.cart.cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+  Array.isArray(state.cart.cartItems) 
+    ? state.cart.cartItems.reduce((total, item) => total + (item.price * item.quantity), 0)
+    : 0;
 export const selectCartItemCount = (state) => 
-  state.cart.cartItems.reduce((count, item) => count + item.quantity, 0);
+  Array.isArray(state.cart.cartItems) 
+    ? state.cart.cartItems.reduce((count, item) => count + item.quantity, 0)
+    : 0;
+
 export default cartSlice.reducer;
