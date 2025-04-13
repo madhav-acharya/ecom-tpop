@@ -174,10 +174,10 @@ const Orders = () => {
         <div className="admin-content">
           <div className="admin-card-header">
             <h1 className="admin-card-title">Orders</h1>
-            <button className="admin-btn" onClick={handleAddOrder}>
+            {/* <button className="admin-btn" onClick={handleAddOrder}>
               <Plus size={18} />
               <span style={{ marginLeft: '8px' }}>Add Order</span>
-            </button>
+            </button> */}
           </div>
 
           <div className="admin-table-responsive">
@@ -309,8 +309,9 @@ const Orders = () => {
                               required
                             >
                               <option value="">Select Product</option>
+                              {console.log("productsList", productsList)}
                               {productsList?.map(p => (
-                                <option key={p?._id} value={p?._id}>{p?.name} - ${p?.price}</option>
+                                <option key={p?._id} value={p?.name}>{p?.name} - ${p?.sellingPrice}</option>
                               ))}
                             </select>
                             <input

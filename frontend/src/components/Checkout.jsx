@@ -30,10 +30,9 @@ const Checkout = () => {
   const[removeUsersCart] = useRemoveUsersCartMutation();
   const dispatch = useDispatch();
   const carts = useSelector(selectCartItems);
-  const {data: user, isSuccess} = useGetCurrentUserQuery();
+  const {data: user, isSuccess, refetch} = useGetCurrentUserQuery();
   const [cartItems, setCartItems] = useState(carts?.cartItems || []);
 
-  console.log("user", user?.user);
   const [isChecked, setIsChecked] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -54,8 +53,24 @@ const Checkout = () => {
   const [step, setStep] = useState(1);
 
   useEffect(() => {
-    if (isSuccess)
+    if (user?.user && !formData) {
+      console.log("searching")
+      setFormData({
+        ...formData,
+        firstName: user?.user?.firstName,
+        lastName: user?.user?.lastName,
+        email: user?.user?.email,
+        phoneNumber: user?.user?.phoneNumber?.number,
+        user: user?.user?.id,
+        billingAddress: user?.user?.billingAddress,
+        shippingAddress: user?.user?.shippingAddress,
+      });
+    }  
+  
+    refetch();
+    if (isSuccess && user?.user) 
     {
+      refetch();
       setFormData({
         ...formData,
         firstName: user?.user?.firstName,
@@ -67,11 +82,12 @@ const Checkout = () => {
         shippingAddress: user?.user?.shippingAddress,
       });
     }
-  }, [user, isSuccess]);
+  }, [user, isSuccess, refetch]);
 
   useEffect(() => {
       if (carts?.status === "idle") {
         dispatch(fetchCart());
+        refetch();
       }
       if (carts?.status === "failed") {
         console.log("status failed", carts?.error);
@@ -117,6 +133,7 @@ const Checkout = () => {
     const errors = {};
     
     if (stepNumber === 1) {
+      refetch();
       if (!formData?.firstName) errors.firstName = 'First name is required';
       if (!formData?.lastName) errors.lastName = 'Last name is required';
       if (!formData?.email) {

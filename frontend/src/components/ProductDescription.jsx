@@ -141,7 +141,8 @@ const ProductDescription = () => {
     }
     console.log("enough", carts?.cartItems?.products?.length);
     toast.success("Product added to cart from buy");
-    navigate("/checkout");
+    // navigate("/checkout");
+    window.location.href = "/checkout";
   };
 
   const shareProduct = () => {

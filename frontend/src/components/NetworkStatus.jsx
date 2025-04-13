@@ -41,10 +41,10 @@ const NetworkStatus = () => {
     <div
       style={{
         position: 'fixed',
-        bottom: 100,
-        left: 100,
+        bottom: 10,
+        left: 10,
         padding: '1rem 3rem',
-        backgroundColor: isOnline ? 'green' : 'red',
+        backgroundColor: 'black',
         color: 'white',
         borderRadius: '8px',
         boxShadow: '0 2px 6px rgba(0,0,0,0.2)',

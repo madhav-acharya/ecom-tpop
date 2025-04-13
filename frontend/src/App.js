@@ -16,13 +16,16 @@ import Users from './components/Users';
 import Orders from './components/Orders';
 import { Routes, Route } from "react-router-dom";
 import NetworkStatus from './components/NetworkStatus';
+import ServerStatus from './components/ServerStatus';
 
 function App() {
+  
   console.log("url",process.env.REACT_APP_API_URL)
   console.log("ENV",process.env.NODE_ENV)
   return (
     <div className="App">
         <NetworkStatus />
+        <ServerStatus />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginPage />} />

@@ -42,6 +42,9 @@ export const authAPI = createApi({
     getAllUsers: builder.query({
       query: () => '/get',
     }),
+    getServerStatus: builder.query({
+      query: () => '/',
+    }),
     getUserById: builder.query({
       query: (id) => `/get/${id}`,
     }),
@@ -95,9 +98,11 @@ export const signup = createAsyncThunk('user/signup', async (userData, { rejectW
 export const login = createAsyncThunk('user/login', async (userData, { rejectWithValue }) => {
   try {
     const { data } = await axios.post(`${API_URL}/login`, userData);
-    localStorage.setItem('token', data.token);
+    console.log("data",data)
+    localStorage.setItem('token', data?.token);
     return data;
   } catch (error) {
+    console.log("Error Occured while logging in");
     console.log("Error Occured while logging in");
     return rejectWithValue(error.response.data.message);
   }
@@ -129,6 +134,6 @@ export const updateImage = async ({id, imageFormData}) => {
   }
 }
 
-export const { useGetAllUsersQuery, useGetUserByIdQuery, useGetCurrentUserQuery, useUpdateUserByIdMutation, useDeleteUserByIdMutation } = authAPI;
+export const { useGetAllUsersQuery, useGetUserByIdQuery, useGetCurrentUserQuery, useUpdateUserByIdMutation, useDeleteUserByIdMutation, useGetServerStatusQuery } = authAPI;
 
 
