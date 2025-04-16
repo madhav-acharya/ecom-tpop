@@ -17,11 +17,15 @@ import Orders from './components/Orders';
 import { Routes, Route } from "react-router-dom";
 import NetworkStatus from './components/NetworkStatus';
 import ServerStatus from './components/ServerStatus';
+import AdminLogin from './components/AdminLogin';
+import { AuthRoute } from './components/AuthRoute';
+import Vendors from './components/Vendor';
 
 function App() {
   
   console.log("url",process.env.REACT_APP_API_URL)
   console.log("ENV",process.env.NODE_ENV)
+  const isAdmin = localStorage.getItem("adminToken");
   return (
     <div className="App">
         <NetworkStatus />
@@ -36,12 +40,15 @@ function App() {
           <Route path="/my-profile" element={<UserProfilePage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
-          <Route path="/admin/*" element={<Admin />} />
-          <Route path="/admin/dashboard" element={<Dashboard />} />
-          <Route path="/admin/products" element={<ManageProduct />} />
-          <Route path="/admin/categories" element={<Categories />} />
-          <Route path="/admin/users" element={<Users />} />
-          <Route path="/admin/orders" element={<Orders />} />
+          <Route path="/admin" element={ <AuthRoute />} >
+            <Route  index element={<AdminLogin /> } />
+            <Route path="dashboard" element={localStorage.getItem("adminToken")&&<Dashboard />} />
+            <Route path="products" element={isAdmin&&<ManageProduct />} />
+            <Route path="categories" element={isAdmin&&<Categories />} />
+            <Route path="vendors" element={isAdmin&&<Vendors />} />
+            <Route path="users" element={isAdmin&&<Users />} />
+            <Route path="orders" element={isAdmin&&<Orders />} />
+          </Route >
         </Routes>
     </div> 
   );

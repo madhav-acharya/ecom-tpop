@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const brandSchema = new mongoose.Schema(
+const vendorSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -13,14 +13,10 @@ const brandSchema = new mongoose.Schema(
       required: false,
       trim: true,
     },
-    image: {
-      type: String, 
-      required: false,
-    },
   },
   { timestamps: true }
 );
 
-const Brand = mongoose.model("Brand", brandSchema);
+const Vendor = mongoose.model("Vendor", vendorSchema);
 
-export default Brand;
+export default Vendor;

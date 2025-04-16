@@ -11,6 +11,7 @@ import {
   Plus,
   X,
   Upload,
+  ShoppingBag,
   ImageIcon
 } from 'lucide-react';
 import '../styles/Admin.css';
@@ -19,6 +20,7 @@ import { useAddProductMutation } from '../app/api/productAPI';
 import { useUpdateProductMutation } from '../app/api/productAPI';
 import { useDeleteProductMutation } from '../app/api/productAPI';
 import { useGetCategoriesQuery } from '../app/api/categoryAPI';
+import { useGetVendorsQuery } from '../app/api/vendorAPI';
 
 const Products = () => {
   const { data: initialProducts, isSuccess, refetch } = useGetProductsQuery();
@@ -27,9 +29,11 @@ const Products = () => {
   const [deleteProduct] = useDeleteProductMutation();
   const [products, setProducts] = useState(initialProducts);
   const { data: categoriess, isSuccess: gotCategories } = useGetCategoriesQuery();
+  const { data: vendorss, isSuccess: gotVendors } = useGetVendorsQuery();
   const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [categories, setCategories] = useState([]);
+  const [vendors, setVendors] = useState([]);
   const [images, setImages] = useState([]);
   const [formData, setFormData] = useState({
     name: '',
@@ -39,6 +43,7 @@ const Products = () => {
     brand: '',
     images: [],
     category: '',
+    vendor: '',
     rating: 0,
     isInStock: true,
     countInStock: 0
@@ -48,9 +53,14 @@ const Products = () => {
   useEffect(() => {
     if (gotCategories) {
       setCategories(categoriess);
-      console.log("categories", categoriess);
     }
   }, [gotCategories, categoriess]);
+
+  useEffect(() => {
+    if (gotVendors) {
+      setVendors(vendorss);
+    }
+  }, [gotVendors, vendorss]);
 
 
   useEffect(() => {
@@ -103,6 +113,7 @@ const Products = () => {
       brand: '',
       images: [],
       category: '',
+      vendor: '',
       rating: 0,
       isInStock: true,
       countInStock: 0
@@ -121,6 +132,7 @@ const Products = () => {
       brand: product?.brand,
       images: product?.images,
       category: product?.category,
+      vendor: product?.vendor,
       rating: product?.rating,
       isInStock: product?.isInStock,
       countInStock: product?.countInStock
@@ -163,6 +175,7 @@ const Products = () => {
     formDataToSubmit.append('markedprice', productData?.markedprice);
     formDataToSubmit.append('brand', productData?.brand);
     formDataToSubmit.append('category', productData?.category);
+    formDataToSubmit.append('vendor', productData?.vendor);
     formDataToSubmit.append('countInStock', productData?.countInStock);
     formDataToSubmit.append('isInStock', productData?.isInStock);
     formDataToSubmit.append('rating', productData?.rating);
@@ -223,6 +236,10 @@ const Products = () => {
             <Tag size={20} />
             <span>Categories</span>
           </Link>
+          <Link to="/admin/vendors" className="admin-nav-item">
+              <ShoppingBag size={20} />
+              <span>Vendors</span>
+          </Link>
           <Link to="/admin/users" className="admin-nav-item">
             <Users size={20} />
             <span>Users</span>
@@ -252,6 +269,7 @@ const Products = () => {
                   <th>Name</th>
                   <th>Brand</th>
                   <th>Category</th>
+                  <th>Vendor</th>
                   <th>Price</th>
                   <th>Stock</th>
                   <th>Status</th>
@@ -272,6 +290,7 @@ const Products = () => {
                     <td>{product?.name}</td>
                     <td>{product?.brand}</td>
                     <td>{product?.category}</td>
+                    <td>{product?.vendor}</td>
                     <td>RS{product?.sellingPrice?.toFixed(2)}</td>
                     <td>{product?.countInStock}</td>
                     <td>
@@ -417,16 +436,34 @@ const Products = () => {
                       />
                     </div>
                   </div>
-                  <div className="admin-form-group">
-                    <label className="admin-form-checkbox">
-                      <input
-                        type="checkbox"
-                        name="isInStock"
-                        checked={formData?.isInStock}
+                  <div className="admin-form-row">
+                    <div className="admin-form-group">
+                      <label className="admin-form-checkbox">
+                        <input
+                          type="checkbox"
+                          name="isInStock"
+                          checked={formData?.isInStock}
+                          onChange={handleInputChange}
+                        />
+                        <span>In Stock</span>
+                      </label>
+                    </div>
+                    <div className="admin-form-group">
+                      <label className="admin-form-label">Vendor</label>
+                      <select
+                        name="vendor"
+                        className="admin-form-select"
+                        value={formData?.vendor}
                         onChange={handleInputChange}
-                      />
-                      <span>In Stock</span>
-                    </label>
+                        required
+                      >
+                        <option value="">Select Vendor</option>
+                        {vendors?.map(vendor => (
+                          <option key={vendor?._id} value={vendor?.name}>{vendor?.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                    
                   </div>
                   
                   {/* Image Upload Section */}

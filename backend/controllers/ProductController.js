@@ -32,6 +32,7 @@ export const addProduct = async (req, res) => {
       markedprice,
       brand,
       category,
+      vendor,
       countInStock,
       isInStock,
       rating,
@@ -59,6 +60,7 @@ export const addProduct = async (req, res) => {
       brand,
       images: imageUrls,
       category,
+      vendor,
       countInStock,
       isInStock,
       rating,
@@ -74,6 +76,7 @@ export const addProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
   try {
+    console.log("Update Product", req.body);
     const { id } = req.params;
 
     const updatedProduct = await Product.findByIdAndUpdate(

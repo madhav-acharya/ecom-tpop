@@ -35,6 +35,11 @@ const productSchema = new mongoose.Schema({
       required: true,
       trim: true
     },
+    vendor: {
+      type: [String],
+      required: true,
+      trim: true
+    },
     reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
     rating: {
       type: Number,

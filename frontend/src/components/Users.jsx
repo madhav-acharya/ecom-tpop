@@ -10,6 +10,7 @@ import {
   Edit, 
   Trash2, 
   X,
+  ShoppingBag,
   User
 } from 'lucide-react';
 import '../styles/Admin.css';
@@ -101,6 +102,10 @@ const Users = () => {
           <Link to="/admin/categories" className="admin-nav-item">
             <Tag size={20} />
             <span>Categories</span>
+          </Link>
+          <Link to="/admin/vendors" className="admin-nav-item">
+              <ShoppingBag size={20} />
+               <span>Vendors</span>
           </Link>
           <Link to="/admin/users" className="admin-nav-item active">
             <UsersIcon size={20} />

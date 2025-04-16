@@ -3,7 +3,6 @@ import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 
-
 const API_URL = `${process.env.REACT_APP_API_URL}/users`;
 
 
@@ -86,11 +85,13 @@ export const authAPI = createApi({
 export const signup = createAsyncThunk('user/signup', async (userData, { rejectWithValue }) => {
   try {
     console.log("userData",userData)
-    const { data } = await axios.post(`${API_URL}/signup`, userData);
+    const  data  = await axios.post(`${API_URL}/signup`, userData);
     console.log("data",data)
+    toast.success("User registered successfully");
     return data;
   } catch (error) {
     console.log("Error Occured while registering user");
+    toast.error(error.response.data.message);;
     return rejectWithValue(error.response.data.message);
   }
 });
@@ -100,10 +101,11 @@ export const login = createAsyncThunk('user/login', async (userData, { rejectWit
     const { data } = await axios.post(`${API_URL}/login`, userData);
     console.log("data",data)
     localStorage.setItem('token', data?.token);
+    toast.success("User logged in successfully");
     return data;
   } catch (error) {
     console.log("Error Occured while logging in");
-    console.log("Error Occured while logging in");
+    toast.error(error.response.data.message);
     return rejectWithValue(error.response.data.message);
   }
 });

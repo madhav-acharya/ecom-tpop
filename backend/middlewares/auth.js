@@ -33,7 +33,15 @@ export const protect = async (req, res, next) => {
   }
 
   if (!token) {
-    console.log("No Token Provided");
+    console.log("No Token Provided ");
     return res.status(401).json({ message: 'Not authorized, no token provided' });
+  }
+};
+
+export const isAdmin = (req, res, next) => {
+  if (req.user && req.user.role?.toLowerCase() === 'admin') {
+    next();
+  } else {
+    res.status(403).json({ message: 'Admin access only' });
   }
 };

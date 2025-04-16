@@ -9,7 +9,8 @@ import {
   Edit, 
   Eye, 
   Plus,
-  X
+  X,
+  ShoppingBag
 } from 'lucide-react';
 import '../styles/Admin.css';
 import { useGetOrdersQuery, useCreateOrderMutation, useUpdateOrderMutation } from '../app/api/orderAPI';
@@ -160,6 +161,10 @@ const Orders = () => {
             <Tag size={20} />
             <span>Categories</span>
           </Link>
+          <Link to="/admin/vendors" className="admin-nav-item">
+            <ShoppingBag size={20} />
+            <span>Vendors</span>
+          </Link>
           <Link to="/admin/users" className="admin-nav-item">
             <Users size={20} />
             <span>Users</span>
@@ -174,10 +179,6 @@ const Orders = () => {
         <div className="admin-content">
           <div className="admin-card-header">
             <h1 className="admin-card-title">Orders</h1>
-            {/* <button className="admin-btn" onClick={handleAddOrder}>
-              <Plus size={18} />
-              <span style={{ marginLeft: '8px' }}>Add Order</span>
-            </button> */}
           </div>
 
           <div className="admin-table-responsive">

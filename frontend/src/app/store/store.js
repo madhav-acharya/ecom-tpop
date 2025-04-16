@@ -9,6 +9,8 @@ import { cartAPI } from '../api/cartAPI';
 import searchReducer from '../features/search/searchSlice';
 import { orderApi } from '../api/orderAPI';
 import { reviewApi } from '../api/reviewAPI';
+import { adminApi } from '../api/adminAPI';
+import { vendorAPI } from '../api/vendorAPI';
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +24,8 @@ export const store = configureStore({
     [cartAPI.reducerPath]: cartAPI.reducer,
     [orderApi.reducerPath]: orderApi.reducer,
     [reviewApi.reducerPath]: reviewApi.reducer,
+    [vendorAPI.reducerPath]: vendorAPI.reducer,
+    [adminApi.reducerPath]: adminApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -30,5 +34,7 @@ export const store = configureStore({
     .concat(categoryAPI.middleware)
     .concat(orderApi.middleware)
     .concat(reviewApi.middleware)
+    .concat(adminApi.middleware)
+    .concat(vendorAPI.middleware)
     .concat(cartAPI.middleware),
 });

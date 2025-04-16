@@ -29,9 +29,6 @@ const Signup = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      setTimeout(() => {
-        toast.success('Signup successful');
-      }, 5);
       navigate('/login');
     } else if (isError) {
       toast.error(errorMessage);
@@ -67,7 +64,7 @@ const Signup = () => {
     return Object.keys(errors).length === 0;
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
     if (validateForm()) {

@@ -13,28 +13,27 @@ import {
   X
 } from 'lucide-react';
 import '../styles/Admin.css';
-import { useAddCategoryMutation, useUpdateCategoryMutation, useGetCategoriesQuery, useDeleteCategoryMutation } from '../app/api/categoryAPI';
+import { useAddVendorMutation, useUpdateVendorMutation, useGetVendorsQuery, useDeleteVendorMutation } from '../app/api/vendorAPI';
 
 
-const Categories = () => {
-  const [addCategory] = useAddCategoryMutation();
-  const [updateCategory] = useUpdateCategoryMutation();
-  const [deleteCategory] = useDeleteCategoryMutation();
-  const { data: initialCategories, isSuccess, refetch } = useGetCategoriesQuery();
-  const [categories, setCategories] = useState(initialCategories);
+const Vendors = () => {
+  const [addVendor] = useAddVendorMutation();
+  const [updateVendor] = useUpdateVendorMutation();
+  const [deleteVendor] = useDeleteVendorMutation();
+  const { data: initialVendors, isSuccess, refetch } = useGetVendorsQuery();
+  const [vendors, setVendors] = useState(initialVendors);
   const [showModal, setShowModal] = useState(false);
-  const [editingCategory, setEditingCategory] = useState(null);
+  const [editingVendor, setEditingVendor] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    image: null,
   });
 
   useEffect(() => {
     if (isSuccess) {
-      setCategories(initialCategories);
+      setVendors(initialVendors);
     }
-  }, [initialCategories, isSuccess]);
+  }, [initialVendors, isSuccess]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -44,49 +43,47 @@ const Categories = () => {
     });
   };
 
-  const handleAddCategory = () => {
-    setEditingCategory(null);
+  const handleAddVendor = () => {
+    setEditingVendor(null);
     setFormData({
       name: '',
       description: '',
-      image: null,
     });
     setShowModal(true);
   };
 
-  const handleEditCategory = (category) => {
-    setEditingCategory(category);
+  const handleEditVendor = (vendor) => {
+    setEditingVendor(vendor);
     setFormData({
-      name: category?.name,
-      description: category?.description,
-      image: category?.image,
+      name: vendor?.name,
+      description: vendor?.description,
     });
     setShowModal(true);
   };
 
-  const handleDeleteCategory = (categoryId) => {
+  const handleDeleteVendor = (vendorId) => {
     
-      setCategories(categories?.filter(category => category?._id !== categoryId));
-      deleteCategory(categoryId);
+      setVendors(vendors?.filter(vendor => vendor?._id !== vendorId));
+      deleteVendor(vendorId);
       refetch();
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    if (editingCategory) {
-      setCategories(categories?.map(category => 
-        category?._id === editingCategory?._id 
-          ? { ...category, ...formData } 
-          : category
+    if (editingVendor) {
+      setVendors(vendors?.map(vendor => 
+        vendor?._id === editingVendor?._id 
+          ? { ...vendor, ...formData } 
+          : vendor
       ));
-      updateCategory({ id: editingCategory?._id, ...formData });
+      updateVendor({ id: editingVendor?._id, ...formData });
     } else {
-      const newCategory = {
+      const newVendor = {
         ...formData
       };
-      setCategories([...categories, newCategory]);
-      addCategory(newCategory);
+      setVendors([...vendors, newVendor]);
+      addVendor(newVendor);
       refetch();
     }
     
@@ -108,13 +105,13 @@ const Categories = () => {
             <Package size={20} />
             <span>Products</span>
           </Link>
-          <Link to="/admin/categories" className="admin-nav-item active">
+          <Link to="/admin/categories" className="admin-nav-item">
             <Tag size={20} />
             <span>Categories</span>
           </Link>
-          <Link to="/admin/vendors" className="admin-nav-item">
-            <ShoppingBag size={20} />
-                <span>Vendors</span>
+          <Link to="/admin/vendors" className="admin-nav-item active">
+             <ShoppingBag size={20} />
+             <span>Vendors</span>
           </Link>
           <Link to="/admin/users" className="admin-nav-item">
             <Users size={20} />
@@ -129,10 +126,10 @@ const Categories = () => {
       <main className="admin-main">
         <div className="admin-content">
           <div className="admin-card-header">
-            <h1 className="admin-card-title">Categories</h1>
-            <button className="admin-btn" onClick={handleAddCategory}>
+            <h1 className="admin-card-title">Vendors</h1>
+            <button className="admin-btn" onClick={handleAddVendor}>
               <Plus size={18} />
-              <span style={{ marginLeft: '8px' }}>Add Category</span>
+              <span style={{ marginLeft: '8px' }}>Add Vendor</span>
             </button>
           </div>
 
@@ -147,21 +144,21 @@ const Categories = () => {
                 </tr>
               </thead>
               <tbody>
-                {categories?.map(category => (
-                  <tr key={category?._id}>
-                    <td>#{category?._id}</td>
-                    <td>{category?.name}</td>
-                    <td>{category?.description}</td>
+                {vendors?.map(vendor => (
+                  <tr key={vendor?._id}>
+                    <td>#{vendor?._id}</td>
+                    <td>{vendor?.name}</td>
+                    <td>{vendor?.description}</td>
                     <td>
                       <button 
                         className="admin-action-btn edit"
-                        onClick={() => handleEditCategory(category)}
+                        onClick={() => handleEditVendor(vendor)}
                       >
                         <Edit size={18} />
                       </button>
                       <button 
                         className="admin-action-btn delete"
-                        onClick={() => handleDeleteCategory(category?._id)}
+                        onClick={() => handleDeleteVendor(vendor?._id)}
                       >
                         <Trash2 size={18} />
                       </button>
@@ -172,13 +169,13 @@ const Categories = () => {
             </table>
           </div>
 
-          {/* Modal for Add/Edit Category */}
+          {/* Modal for Add/Edit Vendor */}
           {showModal && (
             <div className="admin-modal-overlay">
               <div className="admin-modal">
                 <div className="admin-modal-header">
                   <h2 className="admin-modal-title">
-                    {editingCategory ? 'Edit Category' : 'Add New Category'}
+                    {editingVendor ? 'Edit Vendor' : 'Add New Vendor'}
                   </h2>
                   <button className="admin-modal-close" onClick={() => setShowModal(false)}>
                     <X size={24} />
@@ -186,7 +183,7 @@ const Categories = () => {
                 </div>
                 <form className="admin-form" onSubmit={handleSubmit}>
                   <div className="admin-form-group">
-                    <label className="admin-form-label">Category Name</label>
+                    <label className="admin-form-label">Vendor Name</label>
                     <input
                       type="text"
                       name="name"
@@ -215,7 +212,7 @@ const Categories = () => {
                       Cancel
                     </button>
                     <button type="submit" className="admin-btn">
-                      {editingCategory ? 'Update Category' : 'Add Category'}
+                      {editingVendor ? 'Update Vendor' : 'Add Vendor'}
                     </button>
                   </div>
                 </form>
@@ -228,4 +225,4 @@ const Categories = () => {
   );
 };
 
-export default Categories;
+export default Vendors;

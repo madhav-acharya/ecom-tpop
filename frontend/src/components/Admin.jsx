@@ -28,7 +28,7 @@ const Admin = () => {
         <nav className="admin-nav">
           <Link to="/admin/dashboard" className={`admin-nav-item ${isActive('/admin/dashboard')}`}>
             <LayoutDashboard size={20} />
-            <span>Dashboard</span>
+            <span>Dashhboard</span>
             <ChevronRight size={16} className="admin-nav-arrow" />
           </Link>
           <Link to="/admin/products" className={`admin-nav-item ${isActive('/admin/products')}`}>
@@ -38,7 +38,12 @@ const Admin = () => {
           </Link>
           <Link to="/admin/categories" className={`admin-nav-item ${isActive('/admin/categories')}`}>
             <Tag size={20} />
-            <span>Categories</span>
+            <span>Categoriees</span>
+            <ChevronRight size={16} className="admin-nav-arrow" />
+          </Link>
+          <Link to="/admin/categories" className={`admin-nav-item ${isActive('/admin/categories')}`}>
+            <Tag size={20} />
+            <span>Category</span>
             <ChevronRight size={16} className="admin-nav-arrow" />
           </Link>
           <Link to="/admin/users" className={`admin-nav-item ${isActive('/admin/users')}`}>

@@ -23,19 +23,7 @@ const Login = () => {
 
     useEffect(() => {
         if (isSuccess && user) {
-            toast.success('Login successful');
-            setTimeout(() => {
-                window.location.href = '/';
-                // navigate('/');
-                setTimeout(() => {
-                    toast.success('Login successful');
-                }, 20);
-                // setTimeout(() => {
-                //     window.location.reload();
-                // }
-                // , 1000);
-            }, 1000);
-            
+            window.location.href = '/';
         }
         else if (isError) {
             toast.error(errorMessage);

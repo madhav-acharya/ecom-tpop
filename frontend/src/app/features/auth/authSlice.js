@@ -33,8 +33,8 @@ const authSlice = createSlice({
         state.token = action.payload;
       })
       .addCase(signup.rejected, (state, action) => {
-        state.isLoading = false;
         state.isError = true;
+        state.isLoading = false;
         state.errorMessage = action.payload;
       })
       .addCase(login.pending, (state) => {

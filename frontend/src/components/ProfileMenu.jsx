@@ -13,8 +13,11 @@ import Logout from '@mui/icons-material/Logout';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../app/api/authAPI';
 import { useGetCurrentUserQuery } from '../app/api/authAPI';
+import { useNavigate } from 'react-router-dom';
+import { MdAdminPanelSettings } from "react-icons/md";
 
 export default function AccountMenu() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useGetCurrentUserQuery();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -37,7 +40,14 @@ export default function AccountMenu() {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32 }}>{user?.data?.user?.firstName?(user?.data?.user?.firstName?.charAt(0)):"Guest".charAt(0)}</Avatar>
+            {/* <Avatar sx={{ width: 32, height: 32 }}>{user?.data?.user?.firstName?(user?.data?.user?.firstName?.charAt(0)):"Guest".charAt(0)}</Avatar> */}
+            <Avatar
+              alt={user?.data?.user?.firstName}
+              src={user?.data?.user?.profilePicture}
+              sx={{ width: 32, height: 32 }}
+            >
+              {user?.data?.user?.firstName ? user?.data?.user?.firstName.charAt(0) : "G"}
+            </Avatar>
           </IconButton>
         </Tooltip>
       </Box>
@@ -78,22 +88,22 @@ export default function AccountMenu() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={()=>{handleClose();window.location.href="/my-profile"}}>
+        <MenuItem onClick={()=>{window.location.href="/my-profile"}}>
           <Avatar /> My account
         </MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>
+       { user?.data?.user?.role?.toLowerCase() === "admin"&&<MenuItem onClick={()=>{navigate("/admin")}}>
           <ListItemIcon>
-            <PersonAdd fontSize="small" />
+            <MdAdminPanelSettings size={20} />
           </ListItemIcon>
-          Add another account
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
+          Admin Panel
+        </MenuItem>}
+        {/* <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
           Settings
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem onClick={()=>{dispatch(logout())}}>
           <ListItemIcon>
             <Logout fontSize="small" />

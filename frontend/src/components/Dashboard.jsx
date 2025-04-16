@@ -18,7 +18,8 @@ import {
   LayoutDashboard, 
   Package, 
   Users, 
-  ShoppingCart, 
+  ShoppingCart,
+  ShoppingBag, 
   TrendingUp 
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -75,6 +76,10 @@ const Dashboard = () => {
           <Link to="/admin/categories" className="admin-nav-item">
             <Package size={20} />
             <span>Categories</span>
+          </Link>
+          <Link to="/admin/vendors" className="admin-nav-item">
+           <ShoppingBag size={20} />
+             <span>Vendors</span>
           </Link>
           <Link to="/admin/users" className="admin-nav-item">
             <Users size={20} />

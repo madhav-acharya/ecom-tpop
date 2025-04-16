@@ -190,7 +190,7 @@ function Header() {
                 </Link>
             </i>
             <i className="mobile-store">
-                <Link to="/store" className='store-link a'>
+                <Link to="/" className='store-link a'>
                     <IoStorefrontOutline/>
                     <span>Store</span>
                 </Link>
@@ -207,7 +207,7 @@ function Header() {
                 </Link>
             </i>
             <i className="mobile-user">
-                <Link to="/login" className='mobile-login-link a'>
+                <Link to="/my-profile" className='mobile-login-link a'>
                     <AiOutlineUser/>
                     <span>Account</span>
                 </Link>
