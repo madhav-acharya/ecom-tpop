@@ -12,16 +12,27 @@ export const getCart = async (req, res) => {
   
 export const addToCart = async (req, res) => {
   try {
-    const { productId, name, price, customShipping, image, quantity = 1 } = req.body;
+    const { productId, name, price, customShipping, defaultShipping, image, quantity = 1 } = req.body;
     
     let cartItem = await Cart.findOne({ 
       userId: req.user._id, 
       productId
     });
     let product = await Product.findById(productId);
-    console.log("product", product);
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
+    }
+    if (product.countInStock <= 0) {
+      console.log("Product out of stock");
+      return res.status(400).json({ message: 'Product is out of stock' });
+    }
+    if (product.countInStock < quantity) {
+      console.log("Not enough stock available");
+      return res.status(400).json({ message: 'Not enough stock available' });
+    }
+    if (quantity <= 0) {
+      console.log("Quantity cannot be less than 0");
+      return res.status(400).json({ message: 'Quantity cannot be less than 0' });
     }
     
     if (cartItem) {
@@ -48,6 +59,7 @@ export const addToCart = async (req, res) => {
         userId: req.user._id,
         productId,
         customShipping,
+        defaultShipping,
         name,
         price,
         image,

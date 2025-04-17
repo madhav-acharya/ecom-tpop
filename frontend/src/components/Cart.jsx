@@ -138,9 +138,17 @@ const Cart = () => {
               <span>Shipping</span>
               <span>Rs{shipping?.toFixed(2)}</span>
             </div>
-            <div className="summary-row">
-              <span>Tax</span>
-              <span>Rs{tax?.toFixed(2)}</span>
+            <div className="voucher-container">
+              <label className="voucher-label">Voucher</label>
+              <div className="voucher-row">
+                <input
+                  type="text"
+                  className="voucher-input"
+                  placeholder="Enter your voucher code"
+                />
+                <button className="apply-button">Apply</button>
+              </div>
+              {/* <p className="message success">Voucher applied successfully!</p> */}
             </div>
             <div className="summary-row total">
               <span>Total</span>

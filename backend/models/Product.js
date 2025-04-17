@@ -45,6 +45,11 @@ const productSchema = new mongoose.Schema({
       required: true,
       default: 0
     },
+    defaultShipping: {
+      type: Number,
+      required: true,
+      default: 0
+    },
     reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
     rating: {
       type: Number,

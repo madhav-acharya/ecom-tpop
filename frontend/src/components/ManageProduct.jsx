@@ -12,7 +12,8 @@ import {
   X,
   Upload,
   ShoppingBag,
-  ImageIcon
+  ImageIcon,
+  Ticket
 } from 'lucide-react';
 import '../styles/Admin.css';
 import { useGetProductsQuery } from '../app/api/productAPI';
@@ -45,6 +46,7 @@ const Products = () => {
     category: '',
     vendor: '',
     customShipping: 0,
+    defaultShipping: 0,
     rating: 0,
     isInStock: true,
     countInStock: 0
@@ -116,6 +118,7 @@ const Products = () => {
       category: '',
       vendor: '',
       customShipping: 0,
+      defaultShipping: 0,
       rating: 0,
       isInStock: true,
       countInStock: 0
@@ -136,6 +139,7 @@ const Products = () => {
       category: product?.category,
       vendor: product?.vendor,
       customShipping: product?.customShipping,
+      defaultShipping: product?.defaultShipping,
       rating: product?.rating,
       isInStock: product?.isInStock,
       countInStock: product?.countInStock
@@ -180,6 +184,7 @@ const Products = () => {
     formDataToSubmit.append('category', productData?.category);
     formDataToSubmit.append('vendor', productData?.vendor);
     formDataToSubmit.append('customShipping', productData?.customShipping);
+    formDataToSubmit.append('defaultShipping', productData?.defaultShipping);
     formDataToSubmit.append('countInStock', productData?.countInStock);
     formDataToSubmit.append('isInStock', productData?.isInStock);
     formDataToSubmit.append('rating', productData?.rating);
@@ -244,6 +249,10 @@ const Products = () => {
               <ShoppingBag size={20} />
               <span>Vendors</span>
           </Link>
+          <Link to="/admin/promocode" className="admin-nav-item">
+                      <Ticket size={20} />
+                      <span>Promo Code</span>
+                    </Link>
           <Link to="/admin/users" className="admin-nav-item">
             <Users size={20} />
             <span>Users</span>
@@ -442,6 +451,17 @@ const Products = () => {
                   </div>
                   <div className="admin-form-row">
                   <div className="admin-form-group">
+                      <label className="admin-form-label">Default Shipping</label>
+                      <input
+                        type="number"
+                        name="defaultShipping"
+                        step="1"
+                        className="admin-form-input"
+                        value={formData?.defaultShipping}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div className="admin-form-group">
                       <label className="admin-form-label">Custom Shipping</label>
                       <input
                         type="number"
@@ -452,7 +472,9 @@ const Products = () => {
                         onChange={handleInputChange}
                       />
                     </div>
-                    <div className="admin-form-group">
+                    
+                  </div>
+                  <div className="admin-form-group">
                       <label className="admin-form-label">Vendor</label>
                       <select
                         name="vendor"
@@ -467,8 +489,6 @@ const Products = () => {
                         ))}
                       </select>
                     </div>
-                    
-                  </div>
                   <div className="admin-form-group">
                       <label className="admin-form-checkbox">
                         <input

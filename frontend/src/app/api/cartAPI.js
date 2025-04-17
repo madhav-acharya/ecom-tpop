@@ -36,7 +36,7 @@ export const addToCart = createAsyncThunk(
   'cart/addToCart',
   async (product, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${API_URL}/add`, {productId : product?.productId?product?.productId:product?._id, customShipping: product?.customShipping, name: product?.name, price: product?.sellingPrice?product?.sellingPrice:product?.price, image: product.images?.[0], quantity: 1}, {
+      const response = await axios.post(`${API_URL}/add`, {productId : product?.productId?product?.productId:product?._id, customShipping: product?.customShipping, defaultShipping: product?.defaultShipping, name: product?.name, price: product?.sellingPrice?product?.sellingPrice:product?.price, image: product.images?.[0], quantity: 1}, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -20,7 +20,8 @@ import {
   Users, 
   ShoppingCart,
   ShoppingBag, 
-  TrendingUp 
+  TrendingUp,
+  Ticket
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import '../styles/Admin.css';
@@ -81,6 +82,10 @@ const Dashboard = () => {
            <ShoppingBag size={20} />
              <span>Vendors</span>
           </Link>
+          <Link to="/admin/promocode" className="admin-nav-item">
+                      <Ticket size={20} />
+                      <span>Promo Code</span>
+                    </Link>
           <Link to="/admin/users" className="admin-nav-item">
             <Users size={20} />
             <span>Users</span>

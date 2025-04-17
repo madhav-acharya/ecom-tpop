@@ -11,7 +11,8 @@ import {
   Trash2, 
   X,
   ShoppingBag,
-  User
+  User,
+  Ticket
 } from 'lucide-react';
 import '../styles/Admin.css';
 import { useGetAllUsersQuery, useUpdateUserByIdMutation, useDeleteUserByIdMutation } from '../app/api/authAPI';
@@ -107,6 +108,10 @@ const Users = () => {
               <ShoppingBag size={20} />
                <span>Vendors</span>
           </Link>
+          <Link to="/admin/promocode" className="admin-nav-item">
+                      <Ticket size={20} />
+                      <span>Promo Code</span>
+                    </Link>
           <Link to="/admin/users" className="admin-nav-item active">
             <UsersIcon size={20} />
             <span>Users</span>

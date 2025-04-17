@@ -10,7 +10,8 @@ import {
   Trash2, 
   Plus,
   ShoppingBag,
-  X
+  X,
+  Ticket
 } from 'lucide-react';
 import '../styles/Admin.css';
 import { useAddCategoryMutation, useUpdateCategoryMutation, useGetCategoriesQuery, useDeleteCategoryMutation } from '../app/api/categoryAPI';
@@ -115,6 +116,10 @@ const Categories = () => {
           <Link to="/admin/vendors" className="admin-nav-item">
             <ShoppingBag size={20} />
                 <span>Vendors</span>
+          </Link>
+          <Link to="/admin/promocode" className="admin-nav-item">
+            <Ticket size={20} />
+            <span>Promo Code</span>
           </Link>
           <Link to="/admin/users" className="admin-nav-item">
             <Users size={20} />

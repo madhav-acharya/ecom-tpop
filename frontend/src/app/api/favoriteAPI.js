@@ -36,7 +36,7 @@ export const addToFavorites = createAsyncThunk(
   async (product, { rejectWithValue }) => {
     try {
       console.log("product in favorite",product)
-      const response = await axios.post(`${API_URL}/add`, {productId : (product?.productId?product?.productId:product?._id), customShipping: product?.customShipping, name: product.name, price: product.sellingPrice, image: product.images[0]}, {
+      const response = await axios.post(`${API_URL}/add`, {productId : (product?.productId?product?.productId:product?._id), customShipping: product?.customShipping,  defaultShipping: product?.defaultShipping, name: product.name, price: product.sellingPrice, image: product.images[0]}, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

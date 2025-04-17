@@ -20,6 +20,7 @@ import ServerStatus from './components/ServerStatus';
 import AdminLogin from './components/AdminLogin';
 import { AuthRoute } from './components/AuthRoute';
 import Vendors from './components/Vendor';
+import PromoCode  from './components/PromoCode';
 
 function App() {
   
@@ -46,6 +47,7 @@ function App() {
             <Route path="products" element={isAdmin&&<ManageProduct />} />
             <Route path="categories" element={isAdmin&&<Categories />} />
             <Route path="vendors" element={isAdmin&&<Vendors />} />
+            <Route path="promocode" element={isAdmin&&<PromoCode />} />
             <Route path="users" element={isAdmin&&<Users />} />
             <Route path="orders" element={isAdmin&&<Orders />} />
           </Route >

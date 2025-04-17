@@ -12,7 +12,8 @@ import CategoryRoutes from './routes/CategoryRoutes.js';
 import OrderRoutes from './routes/OrderRoutes.js';
 import ReviewRoutes from './routes/ReviewRoutes.js';
 import AdminRoutes from './routes/AdminRoutes.js';
-import VendorRoutes from './routes/VendorRoutes.js'
+import VendorRoutes from './routes/VendorRoutes.js';
+import PromoCodeRoutes from './routes/PromoCodeRoutes.js';
 
 dotenv.config({path: './config/.env'});
 const PORT = process.env.PORT;
@@ -46,7 +47,8 @@ app.use('/api/orders', OrderRoutes);
 app.use('/api/reviews', ReviewRoutes);
 app.use('/uploads', express.static('uploads'));
 app.use('/api/admin', AdminRoutes);
-app.use('/api/vendors', VendorRoutes)
+app.use('/api/vendors', VendorRoutes);
+app.use('/api/promocode', PromoCodeRoutes);
 app.get('/api', (req, res) => {
   res.send('API is running...');
 });

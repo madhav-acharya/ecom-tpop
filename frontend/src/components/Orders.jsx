@@ -10,7 +10,8 @@ import {
   Eye, 
   Plus,
   X,
-  ShoppingBag
+  ShoppingBag,
+  Ticket
 } from 'lucide-react';
 import '../styles/Admin.css';
 import { useGetOrdersQuery, useCreateOrderMutation, useUpdateOrderMutation } from '../app/api/orderAPI';
@@ -165,6 +166,10 @@ const Orders = () => {
             <ShoppingBag size={20} />
             <span>Vendors</span>
           </Link>
+          <Link to="/admin/promocode" className="admin-nav-item">
+                      <Ticket size={20} />
+                      <span>Promo Code</span>
+                    </Link>
           <Link to="/admin/users" className="admin-nav-item">
             <Users size={20} />
             <span>Users</span>

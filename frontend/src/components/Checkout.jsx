@@ -28,6 +28,15 @@ const districtsOfNepal = [
 ];
 
 const Checkout = () => {
+  const notifyerror = (msg) => {
+    toast.dismiss();
+    toast.error(msg);
+  };
+  const notifysuccess = (msg) => {
+    toast.dismiss();
+    toast.success(msg);
+  };
+  
   const navigate = useNavigate();
   const [updateProduct] = useUpdateProductQuantityMutation();
   const [createOrder] = useCreateOrderMutation();
@@ -129,7 +138,7 @@ const Checkout = () => {
   const subtotal = calculateSubtotal();
   const shipping = calculateShipping() + defaultShipping;
   const tax = subtotal * 0.08;
-  const total = subtotal + shipping + tax;
+  const total = subtotal + shipping;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -194,9 +203,6 @@ const Checkout = () => {
     console.log("errors", errors);
     
     if (Object.keys(errors).length === 0) {
-      
-      console.log('Order submitted', formData);
-      setStep(3);
       const orderData = {
         ...formData,
         totalAmount: total,
@@ -205,9 +211,13 @@ const Checkout = () => {
         .unwrap()
         .then((response) => {
           console.log('Order created successfully:', response);
+          notifysuccess('Order placed successfully!');
+          setStep(3);
         })
         .catch((error) => {
           console.error('Error creating order:', error);
+          notifyerror('Error creating order');
+          setStep(2);
         });
         toast.success('Order placed successfully!');
         formData.products.map((item) => {
@@ -503,10 +513,7 @@ const Checkout = () => {
               <span>Shipping</span>
               <span>Rs{shipping?.toFixed(2)}</span>
             </div>
-            <div className="order-total-row">
-              <span>Tax</span>
-              <span>Rs{tax?.toFixed(2)}</span>
-            </div>
+            
             <div className="order-total-row grand-total">
               <span>Total</span>
               <span>Rs{total?.toFixed(2)}</span>

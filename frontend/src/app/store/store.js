@@ -11,6 +11,7 @@ import { orderApi } from '../api/orderAPI';
 import { reviewApi } from '../api/reviewAPI';
 import { adminApi } from '../api/adminAPI';
 import { vendorAPI } from '../api/vendorAPI';
+import { promocodeAPI } from '../api/promocodeAPI';
 
 export const store = configureStore({
   reducer: {
@@ -25,6 +26,7 @@ export const store = configureStore({
     [orderApi.reducerPath]: orderApi.reducer,
     [reviewApi.reducerPath]: reviewApi.reducer,
     [vendorAPI.reducerPath]: vendorAPI.reducer,
+    [promocodeAPI.reducerPath]: promocodeAPI.reducer,
     [adminApi.reducerPath]: adminApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
@@ -36,5 +38,6 @@ export const store = configureStore({
     .concat(reviewApi.middleware)
     .concat(adminApi.middleware)
     .concat(vendorAPI.middleware)
+    .concat(promocodeAPI.middleware)
     .concat(cartAPI.middleware),
 });

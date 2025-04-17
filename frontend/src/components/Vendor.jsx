@@ -10,7 +10,8 @@ import {
   Trash2, 
   Plus,
   ShoppingBag,
-  X
+  X,
+  Ticket
 } from 'lucide-react';
 import '../styles/Admin.css';
 import { useAddVendorMutation, useUpdateVendorMutation, useGetVendorsQuery, useDeleteVendorMutation } from '../app/api/vendorAPI';
@@ -113,6 +114,10 @@ const Vendors = () => {
              <ShoppingBag size={20} />
              <span>Vendors</span>
           </Link>
+          <Link to="/admin/promocode" className="admin-nav-item">
+                      <Ticket size={20} />
+                      <span>Promo Code</span>
+                    </Link>
           <Link to="/admin/users" className="admin-nav-item">
             <Users size={20} />
             <span>Users</span>

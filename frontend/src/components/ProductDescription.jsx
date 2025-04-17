@@ -138,7 +138,7 @@ const ProductDescription = () => {
       console.log("not enough", carts?.cartItems?.products?.length);
       dispatch(addToCart({ ...product, quantity: 1 }));
     }
-    window.location.href = "/checkout";
+    navigate("/cart");
   };
 
   const shareProduct = () => {
