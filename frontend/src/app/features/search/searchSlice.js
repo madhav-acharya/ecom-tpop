@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   searchTerm: "",
   selectedCategory: "",
+  promoDiscount: 0,
 };
 
 const searchSlice = createSlice({
@@ -19,8 +20,14 @@ const searchSlice = createSlice({
       state.searchTerm = "";
       state.selectedCategory = "";
     },
+    setPromoDiscount: (state, action) => {
+      state.promoDiscount = action.payload;
+    },
+    clearPromoDiscount: (state) => {
+      state.promoDiscount = 0;
+    },
   },
 });
 
-export const { setSearchTerm, setSelectedCategory, clearSearch } = searchSlice.actions;
+export const { setSearchTerm, setSelectedCategory, clearSearch, setPromoDiscount, clearPromoDiscount } = searchSlice.actions;
 export default searchSlice.reducer;

@@ -33,7 +33,14 @@ export const promocodeAPI = createApi({
         method: 'DELETE'
       }),
       invalidatesTags: ['Promo']
-    })
+    }),
+    applyPromoCode: builder.mutation({
+        query: (payload) => ({
+          url: '/apply',
+          method: 'POST',
+          body: payload, 
+        }),
+      }),
   })
 });
 
@@ -41,5 +48,6 @@ export const {
   useGetPromoCodesQuery,
   useAddPromoCodeMutation,
   useUpdatePromoCodeMutation,
-  useDeletePromoCodeMutation
+  useDeletePromoCodeMutation,
+    useApplyPromoCodeMutation,
 } = promocodeAPI;

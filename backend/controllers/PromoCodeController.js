@@ -74,10 +74,14 @@ export const deletePromoCode = async (req, res) => {
 
 export const applyPromoCode = async (req, res) => {
   const { code, cartTotal } = req.body;
-
+    console.log("Apply Promo Code", req.body);
   try {
-    const promo = await PromoCode.findOne({ code: code.toUpperCase(), isActive: true });
-    if (!promo) return res.status(404).json({ message: "Promo code not found or inactive" });
+    const promo = await PromoCode.findOne({ code: code.toUpperCase()});
+    if (!promo) 
+    {
+        console.log("Promo code not found");
+        return res.status(404).json({ message: 'Promo code not found' });
+    }
 
     if (promo.min_purchase && cartTotal < promo.min_purchase) {
       return res.status(400).json({ message: `Minimum purchase of ₹${promo.min_purchase} required` });
@@ -98,8 +102,8 @@ export const applyPromoCode = async (req, res) => {
         break;
     }
 
-    res.json({ success: true, discount: Math.floor(discount), message: 'Promo code applied' });
+    res.json({ success: true, discount: Math.floor(discount), message: `Promo code of RS ${Math.floor(discount)} is applied` });
   } catch {
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 };

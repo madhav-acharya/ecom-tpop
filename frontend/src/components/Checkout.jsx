@@ -63,6 +63,7 @@ const Checkout = () => {
     products: cartItems,
     isChecked: isChecked,
   });
+  const promoDiscount = Number(localStorage.getItem("pd")) || 0;
   
   const [formErrors, setFormErrors] = useState({});
   const [step, setStep] = useState(1);
@@ -125,20 +126,30 @@ const Checkout = () => {
       }, 0);
     };
     
-  const defaultShipping = 100;
-  const calculateShipping = () => {
-    return cartItems?.reduce((total, item) => {
-      const shipping = item?.customShipping != null ? item.customShipping : 1;
-      return total + shipping * item?.quantity;
-    }, 0);
-  };
-  
-  
+    const calculateShipping = () => {
+      const quantity = cartItems?.reduce((sum, item) => sum + (item?.quantity || 0), 0);
+      if (quantity === 0) {
+        return 0;
+      }
+      if (quantity === 1) {
+        const item = cartItems[0];
+        const customShipping = item?.customShipping || 0;
+        const defaultShipping = item?.defaultShipping || 0;
+        return customShipping + defaultShipping;
+      } else if (quantity > 1 && quantity < 6) {
+        return 50;
+      } else if (quantity >= 6) {
+        return 0;
+      } else {
+        return 0;
+      }
+    };
+    
 
-  const subtotal = calculateSubtotal();
-  const shipping = calculateShipping() + defaultShipping;
-  const tax = subtotal * 0.08;
-  const total = subtotal + shipping;
+    const subtotal = calculateSubtotal();
+    const shipping = calculateShipping();
+    const tax = subtotal * 0.13;
+    const total = subtotal + shipping;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -512,6 +523,10 @@ const Checkout = () => {
             <div className="order-total-row">
               <span>Shipping</span>
               <span>Rs{shipping?.toFixed(2)}</span>
+            </div>
+            <div className="summary-row">
+              <span>VAT(13%)</span>
+              <span style={{textDecoration: "line-through"}}>Rs{tax?.toFixed(2)}</span>
             </div>
             
             <div className="order-total-row grand-total">

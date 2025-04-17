@@ -8,9 +8,14 @@ import { selectCartItems } from "../app/features/cart/cartSlice";
 import { removeFromCart, updateCartItem } from "../app/api/cartAPI";
 import { AiFillDelete } from "react-icons/ai";
 import { ToastContainer, toast } from "react-toastify";
+import { useApplyPromoCodeMutation } from "../app/api/promocodeAPI";
 
 const Cart = () => {
-  
+  const [code, setCode] = useState("");
+  const [message, setMessage] = useState("");
+  const [promoDiscount, setPromoDiscount] = useState(Number(localStorage.getItem("pd")) || 0);
+  const [isPromoApplied, setIsPromoApplied] = useState(false);
+  const [applyPromoCode] = useApplyPromoCodeMutation();
   const dispatch = useDispatch();
   const carts = useSelector(selectCartItems);
   const [cartItems, setCartItems] = useState(carts?.cartItems || []);
@@ -18,10 +23,9 @@ const Cart = () => {
   const handleRemoveItem = (id) => {
     dispatch(fetchCart());
     dispatch(removeFromCart(id));
-    setCartItems(cartItems.filter((item) => item?._id !== id));
+    setCartItems(cartItems?.filter((item) => item?._id !== id));
     dispatch(fetchCart());
   };
-
   useEffect(() => {
     if (carts?.status === "idle") {
       dispatch(fetchCart());
@@ -33,7 +37,6 @@ const Cart = () => {
       setCartItems(carts?.cartItems);
     }
   }, [dispatch, carts]);
-
  
     const handleQuantityChange = (productId, quantity) => {
         dispatch(updateCartItem({ productId, quantity }));
@@ -46,6 +49,22 @@ const Cart = () => {
         return total + price * quantity;
       }, 0);
     };
+
+    const subtotal = calculateSubtotal();
+
+    const handleApply = async () => {
+      try {
+        const res = await applyPromoCode({ code, cartTotal: subtotal }).unwrap();
+        setPromoDiscount(res.discount);
+        localStorage.setItem("pd", res?.discount);
+        setIsPromoApplied(true);
+        setMessage(res.message);
+      } catch (err) {
+
+        setMessage(err.data?.message || "Invalid promo");
+      }
+    };
+  
 
     const calculateShipping = () => {
       const quantity = cartItems?.reduce((sum, item) => sum + (item?.quantity || 0), 0);
@@ -66,8 +85,6 @@ const Cart = () => {
       }
     };
     
-
-    const subtotal = calculateSubtotal();
     const shipping = calculateShipping();
     const tax = subtotal * 0.13;
     const total = subtotal + shipping;
@@ -150,17 +167,28 @@ const Cart = () => {
               <span>Shipping</span>
               <span>Rs{shipping?.toFixed(2)}</span>
             </div>
+            {promoDiscount&&<div className="summary-row">
+              <span>Promo code Discount</span>
+              <span >Rs{Number(promoDiscount)?.toFixed(2)}</span>
+            </div>}
+            <div className="summary-row">
+              <span>VAT(13%)</span>
+              <span style={{textDecoration: "line-through"}}>Rs{tax?.toFixed(2)}</span>
+            </div>
             <div className="voucher-container">
               <label className="voucher-label">Voucher</label>
               <div className="voucher-row">
                 <input
                   type="text"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
                   className="voucher-input"
                   placeholder="Enter your voucher code"
                 />
-                <button className="apply-button">Apply</button>
+                <button className="apply-button" onClick={handleApply}>Apply</button>
               </div>
-              {/* <p className="message success">Voucher applied successfully!</p> */}
+              {message&&isPromoApplied?<p className="message success">{message}</p>:
+              <p className="message error">{message}</p>}
             </div>
             <div className="summary-row total">
               <span>Total</span>
