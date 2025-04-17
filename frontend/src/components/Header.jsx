@@ -61,6 +61,7 @@ function Header() {
     }, [dispatch, user]);
 
     const items = categories?.data?.map((category) => category?.name);
+   
   return (
     <header className="header">
         <Drawer anchor='left' open={open} onClose={toggleDrawer(false)} className='drawer'>

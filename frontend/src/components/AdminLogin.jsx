@@ -6,6 +6,14 @@ import { useNavigate } from "react-router-dom";
 import { useAdminLoginMutation } from "../app/api/adminAPI";
 
 const AdminLogin = () => {
+  const notifyerror = (msg) => {
+    toast.dismiss();
+    toast.error(msg);
+  };
+  const notifysuccess = (msg) => {
+    toast.dismiss();
+    toast.success(msg);
+  };
     const [adminLogin] = useAdminLoginMutation();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -26,21 +34,18 @@ const AdminLogin = () => {
             .unwrap()
             .then((res) => {
                 setIsLoading(false);
-                console.log("Login Response: ", res?.admin?.token);
-                toast.success("Login successful");
                 localStorage.setItem("adminToken", res?.admin?.token);
-                navigate("/admin/dashboard");
+                window.location.href = "/admin/dashboard";
             })
             .catch((err) => {
                 setIsLoading(false);
                 console.error("Login Error: ", err);
-                toast.error(err?.data?.message || "Login failed");
             });
     };
 
   return (
     <div className="admin-login-container">
-        <ToastContainer />
+        <ToastContainer position="bottom-left" limit={1}/>
       <div className="admin-login-card">
         <div className="admin-login-left">
           <div className="login-brand">

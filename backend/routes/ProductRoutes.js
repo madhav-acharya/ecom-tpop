@@ -1,5 +1,5 @@
 import express from 'express';
-import { getProducts, getProductById, addProduct, updateProduct, deleteProduct } from '../controllers/ProductController.js';
+import { getProducts, getProductById, addProduct, updateProduct, deleteProduct, updateProductQuantity } from '../controllers/ProductController.js';
 import upload from '../middlewares/multer.js';
 
 const router = express.Router();
@@ -9,6 +9,7 @@ router.post('/add', upload.array('images', 10), addProduct);
 router.get('/get/:id', getProductById);
 router.put('/update/:id', updateProduct);
 router.delete('/delete/:id', deleteProduct);
+router.put('/update-quantity/:id', updateProductQuantity);
 router.post('/upload', upload.array('images', 10), (req, res) => {
   if (!req.files) {
     return res.status(400).json({ message: 'No files uploaded' });

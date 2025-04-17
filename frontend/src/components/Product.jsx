@@ -8,10 +8,11 @@ import { addToCart } from '../app/api/cartAPI';
 import { addToFavorites, removeFromFavorites } from '../app/api/favoriteAPI';
 import { selectFavoriteItems } from '../app/features/favorite/favoriteSlice';
 import { fetchFavorites } from '../app/api/favoriteAPI';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import { Link } from 'react-router-dom';
 
 const Product = ({tagName, productList}) => {
+    
     const dispatch = useDispatch();
     const favorites = useSelector((selectFavoriteItems));
 
@@ -27,7 +28,6 @@ const Product = ({tagName, productList}) => {
 
     const handleAddToCart = (product) => {
         dispatch(addToCart({...product, quantity: 1}));
-        toast.success('Product added to cart');
       };
     
       const handleToggleFavorite = (product) => {
@@ -35,10 +35,9 @@ const Product = ({tagName, productList}) => {
         const isFavorite = favorites?.favoriteItems?.some(fav => fav?.productId === (product?.productId?product?.productId:product?._id));
         if (isFavorite) {
           dispatch(removeFromFavorites(product));
-          toast.error('Product removed from favorites');
         } else {
           dispatch(addToFavorites(product));
-          toast.success('Product added to favorites');
+
         }
         dispatch(fetchFavorites());
       };
@@ -48,7 +47,7 @@ const Product = ({tagName, productList}) => {
         <div className="products">
         <span className="tag-name">
             {tagName}
-              <ToastContainer position='bottom-left'/>
+              <ToastContainer position='bottom-left' limit={1}/>
             </span>
         <div className="product-container">
             {productList?.map((product) =>(

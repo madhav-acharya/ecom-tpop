@@ -33,6 +33,7 @@ export const addProduct = async (req, res) => {
       brand,
       category,
       vendor,
+      customShipping,
       countInStock,
       isInStock,
       rating,
@@ -61,6 +62,7 @@ export const addProduct = async (req, res) => {
       images: imageUrls,
       category,
       vendor,
+      customShipping,
       countInStock,
       isInStock,
       rating,
@@ -73,10 +75,35 @@ export const addProduct = async (req, res) => {
   }
 };
 
+export const updateProductQuantity = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+    console.log("product", product);
+    const { quantity } = req.body;
+    if (quantity < 0) {
+      product.countInStock = product.countInStock - Math.abs(quantity);
+    }
+    if (quantity > 0) {
+      product.countInStock = product.countInStock + quantity;
+    }
+    await product.save();
+    res.status(200).json({
+      message: 'Product quantity updated successfully',
+      product,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 
 export const updateProduct = async (req, res) => {
   try {
-    console.log("Update Product", req.body);
     const { id } = req.params;
 
     const updatedProduct = await Product.findByIdAndUpdate(

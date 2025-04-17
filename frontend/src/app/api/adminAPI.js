@@ -2,6 +2,14 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { toast } from 'react-toastify';
 
 const API_URL = `${process.env.REACT_APP_API_URL}/admin`;
+const notifyerror = (msg) => {
+  toast.dismiss();
+  toast.error(msg);
+};
+const notifysuccess = (msg) => {
+  toast.dismiss();
+  toast.success(msg);
+};
 
 const baseQuery = fetchBaseQuery({
   baseUrl: API_URL,
@@ -23,7 +31,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
   if (result.error?.status === 401 && !isOnAuthPage) {
     console.log('Unauthorized! Redirecting to login...');
     localStorage.clear();
-    toast.error('Session expired. Please log in again.');
+    notifyerror('Session expired. Please log in again.');
     window.location.href = '/';
   }
 

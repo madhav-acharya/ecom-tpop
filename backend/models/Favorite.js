@@ -6,6 +6,7 @@ const favoriteSchema = new mongoose.Schema({
   name: { type: String, required: true },
   price: { type: Number, required: true },
   image: { type: String },
+  customShipping: { type: Number, default: 0 },
   dateAdded: { type: Date, default: Date.now }
    });
 

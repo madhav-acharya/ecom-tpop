@@ -107,7 +107,6 @@
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    padding: 24px;
     min-height: calc(100vh - 40px);
   }
   
@@ -334,6 +333,7 @@
     border-radius: 8px;
     padding: 24px;
     width: 100%;
+    min-width: 200px;
     max-width: 500px;
     max-height: 90vh;
     overflow-y: auto;
@@ -528,6 +528,9 @@
     .admin-form-row {
       grid-template-columns: 1fr;
       gap: 10px;
+    }
+    .admin-card{
+      padding: 0;
     }
     
     .image-preview-container {

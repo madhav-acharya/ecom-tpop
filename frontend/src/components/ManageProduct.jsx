@@ -44,6 +44,7 @@ const Products = () => {
     images: [],
     category: '',
     vendor: '',
+    customShipping: 0,
     rating: 0,
     isInStock: true,
     countInStock: 0
@@ -114,6 +115,7 @@ const Products = () => {
       images: [],
       category: '',
       vendor: '',
+      customShipping: 0,
       rating: 0,
       isInStock: true,
       countInStock: 0
@@ -133,6 +135,7 @@ const Products = () => {
       images: product?.images,
       category: product?.category,
       vendor: product?.vendor,
+      customShipping: product?.customShipping,
       rating: product?.rating,
       isInStock: product?.isInStock,
       countInStock: product?.countInStock
@@ -176,6 +179,7 @@ const Products = () => {
     formDataToSubmit.append('brand', productData?.brand);
     formDataToSubmit.append('category', productData?.category);
     formDataToSubmit.append('vendor', productData?.vendor);
+    formDataToSubmit.append('customShipping', productData?.customShipping);
     formDataToSubmit.append('countInStock', productData?.countInStock);
     formDataToSubmit.append('isInStock', productData?.isInStock);
     formDataToSubmit.append('rating', productData?.rating);
@@ -437,16 +441,16 @@ const Products = () => {
                     </div>
                   </div>
                   <div className="admin-form-row">
-                    <div className="admin-form-group">
-                      <label className="admin-form-checkbox">
-                        <input
-                          type="checkbox"
-                          name="isInStock"
-                          checked={formData?.isInStock}
-                          onChange={handleInputChange}
-                        />
-                        <span>In Stock</span>
-                      </label>
+                  <div className="admin-form-group">
+                      <label className="admin-form-label">Custom Shipping</label>
+                      <input
+                        type="number"
+                        name="customShipping"
+                        step="1"
+                        className="admin-form-input"
+                        value={formData?.customShipping}
+                        onChange={handleInputChange}
+                      />
                     </div>
                     <div className="admin-form-group">
                       <label className="admin-form-label">Vendor</label>
@@ -465,6 +469,17 @@ const Products = () => {
                     </div>
                     
                   </div>
+                  <div className="admin-form-group">
+                      <label className="admin-form-checkbox">
+                        <input
+                          type="checkbox"
+                          name="isInStock"
+                          checked={formData?.isInStock}
+                          onChange={handleInputChange}
+                        />
+                        <span>In Stock</span>
+                      </label>
+                    </div>
                   
                   {/* Image Upload Section */}
                   <div className="admin-form-group">
@@ -497,7 +512,7 @@ const Products = () => {
                               src={url} 
                               alt={`Product ${index+1}`}
                               className="image-preview"
-                            //   onError={(e) => {e?.target?.src = 'https://via.placeholder.com/100'}}
+                           
                             />
                             <button 
                               type="button" 

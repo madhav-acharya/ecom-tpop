@@ -57,6 +57,7 @@ const ProductDescription = () => {
     description: data?.description,
     highlights: data?.highlights,
     images: data?.images,
+    countInStock: data?.countInStock,
     rating: data?.rating,
     reviewCount: data?.reviewCount,
     reviews: reviewsData,
@@ -75,6 +76,7 @@ const ProductDescription = () => {
         highlights: data?.highlights,
         images:  data?.images,
         rating: data?.rating,
+        countInStock: data?.countInStock,
         reviewCount: data?.reviews.length,
         reviews: reviewsData,
         category: data?.category,
@@ -97,7 +99,6 @@ const ProductDescription = () => {
 
   const handleAddToCart = (product) => {
     dispatch(addToCart({ ...product, quantity: 1 }));
-    toast.success("Product added to cart");
   };
 
   const handleToggleFavorite = (product) => {
@@ -109,10 +110,8 @@ const ProductDescription = () => {
     );
     if (isFavorite) {
       dispatch(removeFromFavorites(product));
-      toast.error("Product removed from favorites");
     } else {
       dispatch(addToFavorites(product));
-      toast.success("Product added to favorites");
     }
     dispatch(fetchFavorites());
   };
@@ -139,9 +138,6 @@ const ProductDescription = () => {
       console.log("not enough", carts?.cartItems?.products?.length);
       dispatch(addToCart({ ...product, quantity: 1 }));
     }
-    console.log("enough", carts?.cartItems?.products?.length);
-    toast.success("Product added to cart from buy");
-    // navigate("/checkout");
     window.location.href = "/checkout";
   };
 
@@ -161,13 +157,9 @@ const ProductDescription = () => {
   const handleQuantityChange = (productId, quantity, products) => {
     if (!thisCart) {
       dispatch(addToCart({ ...products, quantity: 1 }));
-      toast.success("Product added to cart");
     } else if (thisCart?.quantity + quantity > products?.quantity) {
-      toast.error("Quantity exceeds available stock");
     } else if (thisCart?.quantity + quantity < 1) {
-      toast.error("Quantity cannot be less than 1");
     } else {
-      toast.success("Product quantity updated");
         dispatch(updateCartItem({ productId, quantity }));
     };
   };
@@ -201,7 +193,7 @@ const ProductDescription = () => {
 
   return (
     <div className="product-page">
-      <ToastContainer />
+      <ToastContainer position="bottom-left" limit={1}/>
       <div className="product-container">
         {/* Product images section */}
         <div className="product-images">
@@ -310,12 +302,12 @@ const ProductDescription = () => {
 
           {/* Quantity selector */}
           <div className="quantity-section">
-            <h3 className="section-title">Quantity</h3>
+            <h3 className="section-title">{`Only ${products?.countInStock} pieces are available`}</h3>
             <div className="quantity-selector">
               <button
                 className="quantity-btn"
                 onClick={() => handleQuantityChange(products?.id, -1, data)}
-                disabled={thisCart?.quantity <= 1}
+                // disabled={thisCart?.quantity <= 1}
               >
                 <Minus size={16} />
               </button>
@@ -329,7 +321,7 @@ const ProductDescription = () => {
               <button
                 className="quantity-btn"
                 onClick={() => handleQuantityChange(products?.id, 1, data)}
-                disabled={thisCart?.quantity >= products?.quantity}
+                // disabled={thisCart?.quantity >= products?.countInStock}
               >
                 <Plus size={16} />
               </button>
@@ -338,7 +330,11 @@ const ProductDescription = () => {
 
           {/* Action buttons */}
           <div className="product-actions">
-            <button className="cart-button" onClick={() => {handleAddToCart(data)}}>
+           
+            <button className="cart-button" 
+            onClick={() => {handleAddToCart(data)}} 
+            // disabled={thisCart?.quantity >= products?.countInStock}
+            >
               <ShoppingCart />
               Add to Cart
             </button>

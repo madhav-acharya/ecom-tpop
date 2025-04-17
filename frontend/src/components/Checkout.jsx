@@ -9,6 +9,8 @@ import { useCreateOrderMutation } from '../app/api/orderAPI';
 import { toast } from 'react-toastify';
 import { useRemoveUsersCartMutation } from '../app/api/cartAPI';
 import { useGetCurrentUserQuery } from '../app/api/authAPI';
+import { useNavigate } from 'react-router-dom';
+import { useUpdateProductQuantityMutation } from '../app/api/productAPI';
 
 const districtsOfNepal = [
   "Achham", "Arghakhanchi", "Baglung", "Baitadi", "Bajhang", "Bajura", "Banke",
@@ -26,6 +28,8 @@ const districtsOfNepal = [
 ];
 
 const Checkout = () => {
+  const navigate = useNavigate();
+  const [updateProduct] = useUpdateProductQuantityMutation();
   const [createOrder] = useCreateOrderMutation();
   const[removeUsersCart] = useRemoveUsersCartMutation();
   const dispatch = useDispatch();
@@ -104,15 +108,26 @@ const Checkout = () => {
       }
     }, [dispatch, carts]);
 
-  const calculateSubtotal = () => {
-    return cartItems?.reduce(
-      (total, item) => total + item?.price * item?.quantity,
-      0
-    );
+    const calculateSubtotal = () => {
+      return cartItems?.reduce((total, item) => {
+        const price = Number(item?.price) || 0;
+        const quantity = Number(item?.quantity) || 0;
+        return total + price * quantity;
+      }, 0);
+    };
+    
+  const defaultShipping = 100;
+  const calculateShipping = () => {
+    return cartItems?.reduce((total, item) => {
+      const shipping = item?.customShipping != null ? item.customShipping : 1;
+      return total + shipping * item?.quantity;
+    }, 0);
   };
+  
+  
 
   const subtotal = calculateSubtotal();
-  const shipping = 9.99;
+  const shipping = calculateShipping() + defaultShipping;
   const tax = subtotal * 0.08;
   const total = subtotal + shipping + tax;
 
@@ -195,14 +210,23 @@ const Checkout = () => {
           console.error('Error creating order:', error);
         });
         toast.success('Order placed successfully!');
-        removeUsersCart(formData?.products[0]?.userId).unwrap()
-        .then((response) => {
-          console.log('Cart cleared successfully:', response);
-          setCartItems([]);
-          dispatch(fetchCart());
-        })
-        .catch((error) => {
-          console.error('Error clearing cart:', error);
+        formData.products.map((item) => {
+          const updatedQuantity = -Number(item?.quantity);
+          console.log("updated quantity", updatedQuantity);
+          updateProduct({id: item?.productId, quantity: updatedQuantity })
+            .unwrap()
+            .then((response) => {
+              console.log('Product quantity updated successfully:', response);
+            })
+            .catch((error) => {
+              console.error('Error updating product quantity:', error);
+            });
+          removeUsersCart(item?._id);
+          setInterval(() => {
+            navigate("/")
+            dispatch(fetchCart());
+          }
+          , 10000);
         });
     } else {
       setFormErrors(errors);
@@ -252,7 +276,7 @@ const Checkout = () => {
                     type="text"
                     id="firstName"
                     name="firstName"
-                    value={formData.firstName}
+                    value={formData?.firstName}
                     onChange={handleChange}
                     className={formErrors?.firstName ? 'error' : ''}
                   />
@@ -312,7 +336,7 @@ const Checkout = () => {
                   type="text"
                   id="shippingAddress"
                   name="shippingAddress"
-                  value={formData.shippingAddress}
+                  value={formData?.shippingAddress}
                   onChange={handleChange}
                   className={formErrors?.shippingAddress ? 'error' : ''}
                 />
@@ -383,9 +407,6 @@ const Checkout = () => {
                   )}
                 </div>
 
-                
-                
-                
               </div>
               
               <div className="form-actions">
@@ -438,7 +459,7 @@ const Checkout = () => {
               </div>
               <h2>Order Confirmed!</h2>
               <p>Thank you for your purchase. Your order has been received.</p>
-              <p>Order confirmation has been sent to <strong>{formData.email}</strong></p>
+              <p>Order confirmation has been sent to <strong>{formData?.email}</strong></p>
               <div className="confirmation-details">
                 <div className="confirmation-detail">
                   <span>Order Number:</span>

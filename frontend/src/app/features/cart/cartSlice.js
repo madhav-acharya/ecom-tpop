@@ -38,15 +38,19 @@ const cartSlice = createSlice({
         state.isLoading = false;
         state.status = "failed";
         state.error = action.error.message;
+        console.log("error in cart",action.error)
       })
       .addCase(addToCart.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.isLoading = false;
-        const existingItem = state.cartItems?.find(item => item?.productId === action.payload?.productId);
+        const existingItem = state.cartItems?.find(item => 
+          item?.productId == action.payload?.productId
+          && item?.userId == action.payload?.userId
+        );
         if (existingItem) {
           existingItem.quantity += 1;
         } else {
-          state.cartItems = Array.isArray(state.cartItems) ? [...state.cartItems, action.payload] : [action.payload];
+          state.cartItems.push({ ...action.payload, quantity: 1 });
         }
       })
       .addCase(removeFromCart.pending, (state) => {

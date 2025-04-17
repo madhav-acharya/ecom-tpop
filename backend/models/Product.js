@@ -40,6 +40,11 @@ const productSchema = new mongoose.Schema({
       required: true,
       trim: true
     },
+    customShipping: {
+      type: Number,
+      required: true,
+      default: 0
+    },
     reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
     rating: {
       type: Number,

@@ -7,8 +7,10 @@ import { fetchCart } from "../app/api/cartAPI";
 import { selectCartItems } from "../app/features/cart/cartSlice";
 import { removeFromCart, updateCartItem } from "../app/api/cartAPI";
 import { AiFillDelete } from "react-icons/ai";
+import { ToastContainer, toast } from "react-toastify";
 
 const Cart = () => {
+  
   const dispatch = useDispatch();
   const carts = useSelector(selectCartItems);
   const [cartItems, setCartItems] = useState(carts?.cartItems || []);
@@ -32,23 +34,35 @@ const Cart = () => {
     }
   }, [dispatch, carts]);
 
-  const calculateSubtotal = () => {
-    return cartItems.reduce(
-      (total, item) => total + item?.price * item?.quantity,
-      0
-    );
-  };
-  const handleQuantityChange = (productId, quantity) => {
-      dispatch(updateCartItem({ productId, quantity }));
-  };
+ 
+    const handleQuantityChange = (productId, quantity) => {
+        dispatch(updateCartItem({ productId, quantity }));
+    };
 
-  const subtotal = calculateSubtotal();
-  const shipping = 9.99;
-  const tax = subtotal * 0.08;
-  const total = subtotal + shipping + tax;
+    const calculateSubtotal = () => {
+      return cartItems?.reduce((total, item) => {
+        const price = Number(item?.price) || 0;
+        const quantity = Number(item?.quantity) || 0;
+        return total + price * quantity;
+      }, 0);
+    };
+  
+    const defaultShipping = 100;
+    const calculateShipping = () => {
+      return cartItems?.reduce((total, item) => {
+        const shipping = item?.customShipping != null ? item.customShipping : 1;
+        return total + shipping * item?.quantity;
+      }, 0);
+    };
+
+    const subtotal = calculateSubtotal();
+    const shipping = calculateShipping() + defaultShipping;
+    const tax = subtotal * 0.08;
+    const total = subtotal + shipping + tax;
 
   return (
     <div className="cart-container">
+       <ToastContainer position="bottom-left" limit={1}/>
       <div className="cart-header">
         <h1>
           <ShoppingCart className="cart-icon" />
@@ -132,10 +146,10 @@ const Cart = () => {
               <span>Total</span>
               <span>Rs{total?.toFixed(2)}</span>
             </div>
-            <Link to="/checkout" className="checkout-btn">
+            <button  className="checkout-btn" onClick={() => window.location.href = "/checkout"}>
               Proceed to Checkout
               <ArrowRight size={16} />
-            </Link>
+            </button>
             <Link to="/" className="continue-shopping-link">
               Continue Shopping
             </Link>

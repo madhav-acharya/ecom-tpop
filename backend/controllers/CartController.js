@@ -1,4 +1,5 @@
 import Cart from '../models/Cart.js';
+import Product from '../models/Product.js';
 
 export const getCart = async (req, res) => {
   try {
@@ -11,20 +12,42 @@ export const getCart = async (req, res) => {
   
 export const addToCart = async (req, res) => {
   try {
-    const { productId, name, price, image, quantity = 1 } = req.body;
+    const { productId, name, price, customShipping, image, quantity = 1 } = req.body;
     
     let cartItem = await Cart.findOne({ 
       userId: req.user._id, 
       productId
     });
+    let product = await Product.findById(productId);
+    console.log("product", product);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
     
     if (cartItem) {
+      if (product.countInStock < cartItem.quantity + quantity) {
+        console.log("Product gone out of stock");
+        return res.status(400).json({ message: 'Not enough stock available' });
+      }
+      if (product.countInStock <= 0) {
+        console.log("Product out of stock");
+        return res.status(400).json({ message: 'Product is out of stock' });
+      }
+      if (product.countInStock < quantity) {
+        console.log("Not enough stock available");
+        return res.status(400).json({ message: 'Not enough stock available' });
+      }
+      if (cartItem.quantity < 0)
+      {
+        return res.status(400).json({ message: 'Quantity cannot be less than 0' });
+      }
       cartItem.quantity += quantity;
       await cartItem.save();
     } else {
       cartItem = new Cart({
         userId: req.user._id,
         productId,
+        customShipping,
         name,
         price,
         image,
@@ -79,6 +102,23 @@ export const updateCart = async (req, res) => {
     const cartItem = await Cart.findOne(
       { userId: req.user._id, productId: req.params.id }
     );
+    if (!cartItem) {
+      return res.status(404).json({ message: 'Cart item not found' });
+    }
+    let product = await Product.findById(cartItem.productId);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+    if (product.countInStock < cartItem.quantity + quantity) {
+      return res.status(400).json({ message: 'Not enough stock available' });
+    }
+    if (quantity === 0) {
+      await cartItem.deleteOne();
+      return res.json({ message: 'Item removed from cart' });
+    }
+    if (cartItem.quantity < 0) {
+      return res.status(400).json({ message: 'Quantity cannot be less than 00' });
+    }
     cartItem.quantity = cartItem.quantity + quantity;
     await cartItem.save();
     
