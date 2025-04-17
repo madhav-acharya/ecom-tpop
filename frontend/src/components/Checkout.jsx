@@ -149,7 +149,7 @@ const Checkout = () => {
     const subtotal = calculateSubtotal();
     const shipping = calculateShipping();
     const tax = subtotal * 0.13;
-    const total = subtotal + shipping;
+    const total = subtotal + shipping - promoDiscount;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -245,6 +245,7 @@ const Checkout = () => {
           removeUsersCart(item?._id);
           setInterval(() => {
             navigate("/")
+            localStorage.removeItem("pd");
             dispatch(fetchCart());
           }
           , 10000);
@@ -524,6 +525,10 @@ const Checkout = () => {
               <span>Shipping</span>
               <span>Rs{shipping?.toFixed(2)}</span>
             </div>
+            {promoDiscount>0&&<div className="summary-row">
+              <span>Promo code Discount</span>
+              <span >Rs{Number(promoDiscount)?.toFixed(2)}</span>
+            </div>}
             <div className="summary-row">
               <span>VAT(13%)</span>
               <span style={{textDecoration: "line-through"}}>Rs{tax?.toFixed(2)}</span>

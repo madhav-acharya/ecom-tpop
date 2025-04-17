@@ -60,7 +60,6 @@ const Cart = () => {
         setIsPromoApplied(true);
         setMessage(res.message);
       } catch (err) {
-
         setMessage(err.data?.message || "Invalid promo");
       }
     };
@@ -87,7 +86,7 @@ const Cart = () => {
     
     const shipping = calculateShipping();
     const tax = subtotal * 0.13;
-    const total = subtotal + shipping;
+    const total = subtotal + shipping - promoDiscount;
 
   return (
     <div className="cart-container">
@@ -167,7 +166,7 @@ const Cart = () => {
               <span>Shipping</span>
               <span>Rs{shipping?.toFixed(2)}</span>
             </div>
-            {promoDiscount&&<div className="summary-row">
+            {promoDiscount>0&&<div className="summary-row">
               <span>Promo code Discount</span>
               <span >Rs{Number(promoDiscount)?.toFixed(2)}</span>
             </div>}

@@ -7,6 +7,7 @@ import { useGetProductsQuery } from '../app/api/productAPI';
 
 const Home = () => {
   const  {data}  = useGetProductsQuery();
+  localStorage.removeItem("pd");
   return (
     <div className="home">
         <Header />
