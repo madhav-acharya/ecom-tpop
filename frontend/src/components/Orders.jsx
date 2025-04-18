@@ -381,7 +381,7 @@ const Orders = () => {
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
                     <div>
                       <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '4px' }}>Order #{viewingOrder?._id}</h3>
-                      <p style={{ color: '#64748b', margin: '0' }}>{viewingOrder?.createdAt}</p>
+                      <p style={{ color: '#64748b', margin: '0' }}>{moment(viewingOrder?.createdAt)?.format('MMMM Do YYYY, h:mm:ss a')}</p>
                     </div>
                     <span style={{ 
                       backgroundColor: statusColors?.[viewingOrder?.orderStatus]?.bg || '#f1f5f9',
@@ -391,7 +391,7 @@ const Orders = () => {
                       fontSize: '0.875rem',
                       alignSelf: 'flex-start'
                     }}>
-                      {viewingOrder.orderStatus}
+                      {viewingOrder?.orderStatus}
                     </span>
                   </div>
                   
@@ -405,18 +405,19 @@ const Orders = () => {
                     
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                       <tbody>
-                        <tr>
-                          {viewingOrder?.products?.map((viewOrder)=>(<td style={{ padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>Items ({viewOrder?.name})</td>))}
-                          <td style={{ textAlign: 'right', padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>Rs{(viewingOrder?.totalAmount * 0.8)?.toFixed(2)}</td>
+                      <td style={{ padding: '12px 0', fontWeight: '600' }}>Items</td>
+                      {viewingOrder?.products?.map((viewOrder, index)=>(<tr>
+                          <td style={{ padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>{`${index+1}. ${viewOrder?.name} (${viewOrder?.quantity} pieces)`}</td>
+                          <td style={{ textAlign: 'right', padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>Rs{(viewOrder?.price*viewOrder?.quantity)?.toFixed(2)}</td>
+                        </tr>))}
+                         <tr>
+                          <td style={{ padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>Sub Total</td>
+                          <td style={{ textAlign: 'right', padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>Rs{viewingOrder?.products?.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2)}</td>
                         </tr>
                         <tr>
-                          <td style={{ padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>Tax</td>
-                          <td style={{ textAlign: 'right', padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>Rs{(viewingOrder?.totalAmount * 0.1)?.toFixed(2)}</td>
-                        </tr>
-                        <tr>
-                          <td style={{ padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>Shipping</td>
-                          <td style={{ textAlign: 'right', padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>Rs{(viewingOrder?.totalAmount * 0.1)?.toFixed(2)}</td>
-                        </tr>
+                          <td style={{ padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>Discounts</td>
+                          <td style={{ textAlign: 'right', padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>Rs{(viewingOrder?.totalAmount-viewingOrder?.products?.reduce((sum, item) => sum + item.price * item.quantity, 0))?.toFixed(2)}</td>
+                        </tr> 
                         <tr>
                           <td style={{ padding: '12px 0', fontWeight: '600' }}>Total</td>
                           <td style={{ textAlign: 'right', padding: '12px 0', fontWeight: '600' }}>Rs{viewingOrder?.totalAmount?.toFixed(2)}</td>
