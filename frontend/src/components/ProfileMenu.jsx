@@ -39,16 +39,16 @@ export default function AccountMenu() {
             aria-controls={open ? 'account-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
-          >
-            {/* <Avatar sx={{ width: 32, height: 32 }}>{user?.data?.user?.firstName?(user?.data?.user?.firstName?.charAt(0)):"Guest".charAt(0)}</Avatar> */}
+          > 
+            
             <Avatar
               alt={user?.data?.user?.firstName}
-              src={user?.data?.user?.profilePicture}
+              src={user?.data?.user?.profileImage}
               sx={{ width: 32, height: 32 }}
             >
               {user?.data?.user?.firstName ? user?.data?.user?.firstName.charAt(0) : "G"}
             </Avatar>
-          </IconButton>
+           </IconButton>
         </Tooltip>
       </Box>
       <Menu
@@ -89,7 +89,7 @@ export default function AccountMenu() {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem onClick={()=>{window.location.href="/my-profile"}}>
-          <Avatar /> My account
+          <Avatar src={user?.data?.user?.profileImage}/> My account
         </MenuItem>
         <Divider />
        { user?.data?.user?.role?.toLowerCase() === "admin"&&<MenuItem onClick={()=>{navigate("/admin")}}>
@@ -98,12 +98,6 @@ export default function AccountMenu() {
           </ListItemIcon>
           Admin Panel
         </MenuItem>}
-        {/* <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <Settings fontSize="small" />
-          </ListItemIcon>
-          Settings
-        </MenuItem> */}
         <MenuItem onClick={()=>{dispatch(logout())}}>
           <ListItemIcon>
             <Logout fontSize="small" />

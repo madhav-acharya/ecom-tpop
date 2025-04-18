@@ -73,7 +73,7 @@ export const deletePromoCode = async (req, res) => {
 };
 
 export const applyPromoCode = async (req, res) => {
-  const { code, cartTotal } = req.body;
+  const { code, cartTotal, userId } = req.body;
     console.log("Apply Promo Code", req.body);
   try {
     const promo = await PromoCode.findOne({ code: code.toUpperCase()});
@@ -81,6 +81,11 @@ export const applyPromoCode = async (req, res) => {
     {
         console.log("Promo code not found");
         return res.status(404).json({ message: 'Promo code not found' });
+    }
+
+    if (promo.usedBy.includes(userId)) {
+      console.log("Promo code already used");
+      return res.status(400).json({ message: 'You have already used this promo code' });
     }
 
     if (promo.min_purchase && cartTotal < promo.min_purchase) {
@@ -101,6 +106,8 @@ export const applyPromoCode = async (req, res) => {
         if (discount > promo.max_discount) discount = promo.max_discount;
         break;
     }
+    promo.usedBy.push(userId);
+    await promo.save();
 
     res.json({ success: true, discount: Math.floor(discount), message: `Promo code of RS ${Math.floor(discount)} is applied` });
   } catch {

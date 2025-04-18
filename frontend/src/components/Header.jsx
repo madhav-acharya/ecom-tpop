@@ -25,6 +25,7 @@ import { useGetCurrentUserQuery } from '../app/api/authAPI';
 import { setSearchTerm } from '../app/features/search/searchSlice';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import { X } from 'lucide-react';
 
 
 function Header() {
@@ -79,7 +80,9 @@ function Header() {
             <div className="user">
                 <ProfileMenu/>
                 {`Welcome, ${(user?.data?.user?.firstName)? user?.data?.user?.firstName: "Guest"}`}
+                
             </div>}
+            <X onClick={toggleDrawer(false)} className='drawer-close-icon'/>
         </Drawer>
 
         <div className="upper-nav">

@@ -51,10 +51,11 @@ const Cart = () => {
     };
 
     const subtotal = calculateSubtotal();
+    console.log("userId", cartItems?.[0]?.userId);
 
     const handleApply = async () => {
       try {
-        const res = await applyPromoCode({ code, cartTotal: subtotal }).unwrap();
+        const res = await applyPromoCode({ code, cartTotal: subtotal, userId: cartItems?.[0]?.userId }).unwrap();
         setPromoDiscount(res.discount);
         localStorage.setItem("pd", res?.discount);
         setIsPromoApplied(true);

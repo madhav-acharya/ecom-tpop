@@ -7,6 +7,7 @@ const promoCodeSchema = new mongoose.Schema({
   discount_percent: Number,
   max_discount: Number,
   min_purchase: Number,
+  usedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   isActive: { type: Boolean, default: true }
 }, { timestamps: true });
 

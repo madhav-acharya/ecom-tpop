@@ -269,6 +269,14 @@
     }
     
 }
+.drawer-close-icon{
+    position: absolute;
+    top: 2.8rem;
+    right: 1rem;
+    font-size: 2rem;
+    color: #FF2905;
+    cursor: pointer;
+}
 @media (width < 800px) {
     .upper-nav .user{
         display: none;
@@ -277,11 +285,11 @@
         gap: .5rem;
     }
     .user{
-        flex-direction: column;
         gap: 1rem;
         padding: 2rem;
         padding-right: 10rem;
-        align-items: flex-start;
+        justify-content: center;
+        align-items: center;
     }
     .mobile-nav{
         display: flex;
@@ -315,6 +323,9 @@
 @media (width < 330px) {
     .lower-nav{
         flex-direction: column;
+    }
+    .drawer-close-icon{
+        right: 20%;
     }
     .cart-overlay{
         min-width: 100%;
