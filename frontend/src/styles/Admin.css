@@ -276,8 +276,10 @@
   }
   
   .admin-btn {
-    display: inline-block;
-    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: .5rem 1rem;
     background-color: #3b82f6;
     color: white;
     border: none;

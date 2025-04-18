@@ -37,7 +37,8 @@ const PromoCode = () => {
     discount_amount: '',
     discount_percent: '',
     min_purchase: '',
-    max_discount: ''
+    max_discount: '',
+    limit: 0
   });
 
   useEffect(() => {
@@ -57,7 +58,8 @@ const PromoCode = () => {
         discount_amount: '',
         discount_percent: '',
         min_purchase: '',
-        max_discount: ''
+        max_discount: '',
+        limit: 0
     });
     setShowModal(true);
   };
@@ -70,7 +72,8 @@ const PromoCode = () => {
         discount_amount: promo?.discount_amount,
         discount_percent: promo?.discount_percent,
         min_purchase: promo?.min_purchase,
-        max_discount: promo?.max_discount
+        max_discount: promo?.max_discount,
+        limit: promo?.limit
     });
     setShowModal(true);
   };
@@ -159,6 +162,8 @@ const PromoCode = () => {
               <th>Flat Discount</th>
               <th>Min Purchase</th>
               <th>Max Discount</th>
+              <th>Limit</th>
+              <th>Used</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -171,6 +176,8 @@ const PromoCode = () => {
                 <td>{promo?.discount_amount || '-'}</td>
                 <td>{promo?.min_purchase || '-'}</td>
                 <td>{promo?.max_discount || '-'}</td>
+                <td>{promo?.limit || '-'}</td>
+                <td>{promo?.usedBy?.length || 0}</td>
                 <td>
                   <button className="admin-action-btn edit" onClick={() => handleEdit(promo)}>
                     <Edit size={18} />
@@ -200,6 +207,10 @@ const PromoCode = () => {
               <div className="admin-form-group">
                 <label className="admin-form-label">Code</label>
                 <input type="text" name="code" className="admin-form-input" value={formData?.code} onChange={handleChange} required />
+              </div>
+              <div className="admin-form-group">
+                <label className="admin-form-label">Limit</label>
+                <input type="number" name="limit" className="admin-form-input" value={formData?.limit} onChange={handleChange} required />
               </div>
               <div className="admin-form-group">
                 <label className="admin-form-label">Type</label>

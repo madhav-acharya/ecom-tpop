@@ -87,6 +87,10 @@ export const applyPromoCode = async (req, res) => {
       console.log("Promo code already used");
       return res.status(400).json({ message: 'You have already used this promo code' });
     }
+    if(promo?.usedBy?.length >= promo?.limit) {
+      console.log("Promo code limit reached");
+      return res.status(400).json({ message: 'Promo code usage limit reached' });
+    }
 
     if (promo.min_purchase && cartTotal < promo.min_purchase) {
       return res.status(400).json({ message: `Minimum purchase of ₹${promo.min_purchase} required` });
