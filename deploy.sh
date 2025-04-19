@@ -9,6 +9,7 @@ cd ..
 
 cd frontend
 npm install 
+sudo rm -rf build
 npm run build 
 
 sudo rm -rf /var/www/ecom-tpop/frontend/build
