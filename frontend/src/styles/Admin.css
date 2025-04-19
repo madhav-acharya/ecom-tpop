@@ -275,6 +275,49 @@
     resize: vertical;
   }
   
+  .admin-card-header select {
+    padding: 6px 10px;
+    margin-right: 2rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    width: 6rem;
+  }
+  .status {
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+  
+  .status.pending {
+    color: #f97316;
+  }
+  
+  .status.delivered {
+    color: #10b981;
+  }
+  
+  .status.shipped {
+    color: #3b82f6;
+  }
+  
+  .status.processing {
+    color: #8b5cf6;
+  }
+  
+  .status.cancelled {
+    color: #ef4444;
+  }
+  
+  .orders-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .orders-table th,
+  .orders-table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
   .admin-btn {
     display: flex;
     align-items: center;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { 
   BarChart, 
   Bar, 
@@ -25,6 +25,15 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import '../styles/Admin.css';
+import { useGetDashboardStatsQuery,
+  useGetHourlySalesOverviewQuery,
+  useGetMinutelySalesOverviewQuery,
+  useGetDailySalesOverviewQuery,
+  useGetWeeklySalesOverviewQuery,
+  useGetMonthlySalesOverviewQuery,
+  useGetProductCategoriesQuery,
+  useGetOrderStatusSummaryQuery,
+  useGetRecentOrdersQuery } from "../app/api/adminAPI";
 
 const salesData = [
   { name: 'Jan', sales: 4000 },
@@ -41,24 +50,61 @@ const salesData = [
   { name: 'Dec', sales: 9000 },
 ];
 
-const productData = [
-  { name: 'Electronics', value: 35 },
-  { name: 'Clothing', value: 25 },
-  { name: 'Home & Kitchen', value: 20 },
-  { name: 'Books', value: 10 },
-  { name: 'Others', value: 10 },
-];
-
-const orderStatusData = [
-  { name: 'Pending', value: 15 },
-  { name: 'Processing', value: 25 },
-  { name: 'Shipped', value: 35 },
-  { name: 'Delivered', value: 25 },
-];
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 
 const Dashboard = () => {
+  const [range, setRange] = useState("daily");
+  const { data: stats, isLoading: statsLoading, refetch: statsRefetch } = useGetDashboardStatsQuery();
+  const { data: weeklySalesOverview, isLoading: weeklyLoading, refetch: weeklyRefetch } = useGetWeeklySalesOverviewQuery();
+  const { data: monthlySalesOverview, isLoading: monthlyLoading, refetch: monthlyRefetch } = useGetMonthlySalesOverviewQuery();
+  const { data: dailySalesOverview, isLoading: dailyLoading, refetch: dailyRefetch } = useGetDailySalesOverviewQuery();
+  const { data: hourlySalesOverview, isLoading: hourlyLoading, refetch: hourlyRefetch } = useGetHourlySalesOverviewQuery();
+  const { data: minutelySalesOverview, isLoading: minutelyLoading, refetch: minutelyRefetch } = useGetMinutelySalesOverviewQuery();
+  const { data: productCategories, isLoading: categoriesLoading, refetch: categoriesRefetch } = useGetProductCategoriesQuery();
+  const { data: orderStatusSummary, isLoading: statusLoading, refetch: orderRefetch } = useGetOrderStatusSummaryQuery();
+  const { data: recentOrders, isLoading: ordersLoading, refetch: recentOrderRefetch } = useGetRecentOrdersQuery();
+  const [salesOverview, setSalesOverview] = useState([]);
+
+  useEffect(() => {
+    switch (range) {
+      case 'daily':
+        setSalesOverview(dailySalesOverview || []);
+        break;
+      case 'weekly':
+        setSalesOverview(weeklySalesOverview || []);
+        break;
+      case 'monthly':
+        setSalesOverview(monthlySalesOverview || []);
+        break;
+      case 'hourly':
+        setSalesOverview(hourlySalesOverview || []);
+        break;
+      case 'minutely':
+        setSalesOverview(minutelySalesOverview || []);
+        break;
+      default:
+        setSalesOverview([]);
+    }
+  }, [range, dailySalesOverview, weeklySalesOverview, monthlySalesOverview]);
+
+  const getStatusClass = (status) => {
+    switch (status.toLowerCase()) {
+      case "pending":
+        return "status pending";
+      case "delivered":
+        return "status delivered";
+      case "shipped":
+        return "status shipped";
+      case "processing":
+        return "status processing";
+      case "cancelled":
+        return "status cancelled";
+      default:
+        return "status";
+    }
+  };
+
   return (
     <div className="admin-container">
       <aside className="admin-sidebar">
@@ -108,7 +154,7 @@ const Dashboard = () => {
               </div>
               <div className="admin-stat-content">
                 <h3>Total Products</h3>
-                <p>248</p>
+                <p>{stats?.totalProducts}</p>
               </div>
             </div>
             
@@ -118,7 +164,7 @@ const Dashboard = () => {
               </div>
               <div className="admin-stat-content">
                 <h3>Total Orders</h3>
-                <p>1,456</p>
+                <p>{stats?.totalOrders}</p>
               </div>
             </div>
             
@@ -128,7 +174,7 @@ const Dashboard = () => {
               </div>
               <div className="admin-stat-content">
                 <h3>Total Users</h3>
-                <p>854</p>
+                <p>{stats?.totalUsers}</p>
               </div>
             </div>
             
@@ -138,7 +184,7 @@ const Dashboard = () => {
               </div>
               <div className="admin-stat-content">
                 <h3>Total Revenue</h3>
-                <p>$34,256</p>
+                <p>Rs {stats?.totalRevenue?.toFixed(2)}</p>
               </div>
             </div>
           </div>
@@ -147,10 +193,17 @@ const Dashboard = () => {
           <div className="admin-card" style={{ marginTop: '20px' }}>
             <div className="admin-card-header">
               <h2 className="admin-card-title">Sales Overview</h2>
+              <select value={range} onChange={(e) => setRange(e.target.value)}>
+                <option value="minutely">Minutely</option>
+                <option value="hourly">Hourly</option>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+              </select>
             </div>
             <div style={{ height: '300px' }} className='res-chart'>
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={salesData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                <LineChart data={salesOverview} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" />
                   <YAxis />
@@ -171,7 +224,7 @@ const Dashboard = () => {
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
-                      data={productData}
+                      data={productCategories}
                       cx="50%"
                       cy="50%"
                       outerRadius={100}
@@ -179,7 +232,7 @@ const Dashboard = () => {
                       dataKey="value"
                       label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                     >
-                      {productData.map((entry, index) => (
+                      {productCategories?.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
@@ -196,7 +249,7 @@ const Dashboard = () => {
               </div>
               <div style={{ height: '300px' }}>
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={orderStatusData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                  <BarChart data={orderStatusSummary} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="name" />
                     <YAxis />
@@ -225,41 +278,15 @@ const Dashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>#ORD-001</td>
-                    <td>John Doe</td>
-                    <td>2023-04-05</td>
-                    <td><span style={{color: '#f97316'}}>Pending</span></td>
-                    <td>$125.00</td>
-                  </tr>
-                  <tr>
-                    <td>#ORD-002</td>
-                    <td>Jane Smith</td>
-                    <td>2023-04-04</td>
-                    <td><span style={{color: '#10b981'}}>Delivered</span></td>
-                    <td>$250.00</td>
-                  </tr>
-                  <tr>
-                    <td>#ORD-003</td>
-                    <td>Robert Johnson</td>
-                    <td>2023-04-03</td>
-                    <td><span style={{color: '#3b82f6'}}>Shipped</span></td>
-                    <td>$545.00</td>
-                  </tr>
-                  <tr>
-                    <td>#ORD-004</td>
-                    <td>Emily Davis</td>
-                    <td>2023-04-02</td>
-                    <td><span style={{color: '#8b5cf6'}}>Processing</span></td>
-                    <td>$85.00</td>
-                  </tr>
-                  <tr>
-                    <td>#ORD-005</td>
-                    <td>Michael Wilson</td>
-                    <td>2023-04-01</td>
-                    <td><span style={{color: '#10b981'}}>Delivered</span></td>
-                    <td>$325.00</td>
-                  </tr>
+                {recentOrders?.map((order, index) => (
+                    <tr key={index}>
+                      <td>{order?.id}</td>
+                      <td>{order?.customer}</td>
+                      <td>{order?.date}</td>
+                      <td><span className={getStatusClass(order?.status)}>{order?.status}</span></td>
+                      <td>Rs {order?.amount?.toFixed(2)}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

@@ -107,10 +107,32 @@ export const updateProductQuantity = async (req, res) => {
 export const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
+    let updatedData = { ...req.body };
+    console.log("req.body", req.body);
+    console.log("req.files", req.files);
+
+    if (req.files && req.files.length > 0) {
+      const uploadPromises = req.files.map(file =>
+        cloudinary.uploader.upload(file.path, {
+          folder: "TPOP/products",
+          resource_type: "image",
+        })
+      );
+
+      const uploadedResults = await Promise.all(uploadPromises);
+      const newImageUrls = uploadedResults.map(result => result.secure_url);
+
+      const product = await Product.findById(id);
+      if (!product) {
+        return res.status(404).json({ message: 'Product not found' });
+      }
+
+      updatedData.images = [...product.images, ...newImageUrls];
+    }
 
     const updatedProduct = await Product.findByIdAndUpdate(
       id,
-      { $set: req.body },
+      { $set: updatedData },
       { new: true, runValidators: true }
     );
 
@@ -123,6 +145,8 @@ export const updateProduct = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+
 export const deleteProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);

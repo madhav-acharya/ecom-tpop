@@ -103,6 +103,23 @@ const Products = () => {
       ...formData,
       images: updatedImages
     });
+    updateProduct({
+      id: editingProduct?._id,
+      product: {
+        ...formData,
+        images: updatedImages
+      }
+    })
+      .unwrap()
+      .then(() => {
+        console.log('Product updated successfully');
+        setProducts(products);
+        refetch();
+      })
+      .catch((error) => {
+        console.error('Failed to update product: ', error);
+      });
+    setImages(updatedImages);
     setImagePreviewUrls(updatedPreviews);
   };
 
@@ -171,6 +188,8 @@ const Products = () => {
       countInStock: parseInt(formData?.countInStock),
       rating: parseFloat(formData?.rating || 0)
     };
+    setImages(formData?.images);
+    console.log("formdata.images", formData?.images);
     const formDataToSubmit = new FormData();
     console.log("images", images);
     images?.forEach((image) => {
@@ -188,9 +207,7 @@ const Products = () => {
     formDataToSubmit.append('countInStock', productData?.countInStock);
     formDataToSubmit.append('isInStock', productData?.isInStock);
     formDataToSubmit.append('rating', productData?.rating);
-    formDataToSubmit.append('reviews', productData?.reviews);
 
-    
     if (editingProduct) {
       const updatedProducts = products.map(product =>
         product?._id === editingProduct?._id
@@ -198,7 +215,7 @@ const Products = () => {
           : product
       );
       setProducts(updatedProducts);
-      await updateProduct({ id: editingProduct?._id, product: productData })
+      await updateProduct({ id: editingProduct?._id, product: formDataToSubmit })
         .unwrap()
         .then(() => {
           console.log('Product updated successfully');

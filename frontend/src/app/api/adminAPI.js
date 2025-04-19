@@ -50,7 +50,43 @@ export const adminApi = createApi({
         body: credentials,
       }),
     }),
+    getDashboardStats: builder.query({
+      query: () => '/dashboard-stats'
+    }),
+    getDailySalesOverview: builder.query({
+      query: () => '/sales/daily'
+    }),
+    getWeeklySalesOverview: builder.query({
+      query: () => '/sales/weekly'
+    }),
+    getMonthlySalesOverview: builder.query({
+      query: () => '/sales/monthly'
+    }),
+    getHourlySalesOverview: builder.query({
+      query: () => '/sales/hourly'
+    }),
+    getMinutelySalesOverview: builder.query({
+      query: () => '/sales/minutely'
+    }),
+    getProductCategories: builder.query({
+      query: () => '/product-categories'
+    }),
+    getOrderStatusSummary: builder.query({
+      query: () => '/order-status-summary'
+    }),
+    getRecentOrders: builder.query({
+      query: () => '/recent-orders'
+    }),
   }),
 });
 
-export const { useAdminLoginMutation } = adminApi;
+export const { useAdminLoginMutation, 
+  useGetDashboardStatsQuery,
+  useGetHourlySalesOverviewQuery,
+  useGetMinutelySalesOverviewQuery,
+  useGetDailySalesOverviewQuery,
+  useGetWeeklySalesOverviewQuery,
+  useGetMonthlySalesOverviewQuery,
+  useGetProductCategoriesQuery,
+  useGetOrderStatusSummaryQuery,
+  useGetRecentOrdersQuery } = adminApi;
